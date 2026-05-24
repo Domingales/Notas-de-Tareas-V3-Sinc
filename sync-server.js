@@ -9,18 +9,24 @@ const DATA_FILE = path.join(ROOT, 'datos_sincronizacion.json');
 
 function generarId(){return 'srv_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,9)}
 function clonar(o){return JSON.parse(JSON.stringify(o || {}))}
+function fechaSyncValida(v){const t=Date.parse(String(v||''));return Number.isFinite(t)?t:0}
+function timestampInicial(r){
+  const posibles=[r&&r.ultimaModificacion,r&&r.modificadoEn,r&&r.updatedAt,r&&r.fechaModificacion];
+  for(const v of posibles){const t=fechaSyncValida(v); if(t) return new Date(t).toISOString();}
+  return '1970-01-01T00:00:00.000Z';
+}
 function normalizarSubtareas(lista){
   if(!Array.isArray(lista)) return [];
   return lista.map(s => typeof s === 'string'
-    ? {id:generarId(),cod:'',texto:s,inicio:'',vence:'',fin:'',prioridad:'media',subtareas:[]}
-    : {id:s.id||generarId(),cod:s.cod||'',texto:String(s.texto||''),inicio:s.inicio||'',vence:s.vence||'',fin:s.fin||'',prioridad:['baja','media','alta','critica'].includes(s.prioridad)?s.prioridad:'media',subtareas:normalizarSubtareas(s.subtareas||s.subs)}
+    ? {id:generarId(),cod:'',texto:s,inicio:'',vence:'',fin:'',prioridad:'media',ultimaModificacion:new Date().toISOString(),subtareas:[]}
+    : {id:s.id||generarId(),cod:s.cod||'',texto:String(s.texto||''),inicio:s.inicio||'',vence:s.vence||'',fin:s.fin||'',prioridad:['baja','media','alta','critica'].includes(s.prioridad)?s.prioridad:'media',ultimaModificacion:timestampInicial(s),subtareas:normalizarSubtareas(s.subtareas||s.subs)}
   );
 }
 function normalizarTareas(lista){
   if(!Array.isArray(lista)) return [];
-  return lista.map((t,i)=>({id:t.id||generarId(),cod:String(t.cod||String(i+1).padStart(4,'0')).slice(-4).padStart(4,'0'),texto:String(t.texto||t.tarea||'Sin texto'),inicio:t.inicio||'',vence:t.vence||'',fin:t.fin||'',prioridad:['baja','media','alta','critica'].includes(t.prioridad)?t.prioridad:'media',subtareas:normalizarSubtareas(t.subtareas||t.subs)}));
+  return lista.map((t,i)=>({id:t.id||generarId(),cod:String(t.cod||String(i+1).padStart(4,'0')).slice(-4).padStart(4,'0'),texto:String(t.texto||t.tarea||'Sin texto'),inicio:t.inicio||'',vence:t.vence||'',fin:t.fin||'',prioridad:['baja','media','alta','critica'].includes(t.prioridad)?t.prioridad:'media',ultimaModificacion:timestampInicial(t),subtareas:normalizarSubtareas(t.subtareas||t.subs)}));
 }
-function paqueteVacio(){return {version:'v3-servidor',exportadoEn:new Date().toISOString(),tareas:[],historial:[],ultimoCambio:null,filtros:{},ajustes:{}}}
+function paqueteVacio(){return {version:'v3-servidor-v23',exportadoEn:new Date().toISOString(),tareas:[],historial:[],ultimoCambio:null,filtros:{},ajustes:{}}}
 function leerDatos(){
   try{
     if(!fs.existsSync(DATA_FILE)) return paqueteVacio();
@@ -34,6 +40,7 @@ function leerDatos(){
   }
 }
 function guardarDatos(data){
+  data.version='v3-servidor-v23';
   data.exportadoEn = new Date().toISOString();
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
 }
@@ -43,20 +50,29 @@ function siguienteCodigo(lista){
 }
 function campoDiferente(a,b,c){return String(a&&a[c]!==undefined?a[c]:'')!==String(b&&b[c]!==undefined?b[c]:'')}
 function descripcion(r,padre){return (padre?'Subtarea de '+padre:'Tarea '+(r.cod||'sin código'))+': '+String(r.texto||'sin texto').slice(0,80)}
+function copiarCampos(dest,src){['texto','inicio','vence','fin','prioridad','ultimaModificacion'].forEach(c=>{dest[c]=src[c]!==undefined?src[c]:''})}
+function resolverDiferencias(loc,imp,reporte,desc){
+  const campos=['texto','inicio','vence','fin','prioridad'];
+  const difs=campos.filter(c=>campoDiferente(loc,imp,c));
+  if(!difs.length) return 'igual';
+  const tl=fechaSyncValida(loc.ultimaModificacion), ti=fechaSyncValida(imp.ultimaModificacion);
+  if(ti>tl){copiarCampos(loc,imp);reporte.actualizadosPorFecha++;reporte.resueltos.push(desc+' actualizado en servidor con versión más reciente del dispositivo ('+imp.ultimaModificacion+')');return 'actualizado'}
+  if(tl>ti){reporte.mantenidosPorFecha++;reporte.resueltos.push(desc+' mantiene versión del servidor por ser más reciente ('+loc.ultimaModificacion+')');return 'mantenido'}
+  difs.forEach(c=>reporte.conflictos.push(desc+' | campo '+c+' distinto sin fecha más reciente clara. Servidor: ['+String(loc[c]||'')+'] / Dispositivo: ['+String(imp[c]||'')+']'));
+  return 'conflicto';
+}
 function fusionarSubtareas(localLista, importLista, reporte, padreCod){
   if(!Array.isArray(localLista)) localLista=[];
   (importLista||[]).forEach(imp=>{
     const loc = localLista.find(x=>x.id&&imp.id&&x.id===imp.id);
     if(!loc){ localLista.push(clonar(imp)); reporte.subtareasAnadidas++; return; }
-    ['texto','inicio','vence','fin','prioridad'].forEach(c=>{
-      if(campoDiferente(loc,imp,c)) reporte.conflictos.push(descripcion(loc,padreCod)+' | campo '+c+' distinto. Servidor: ['+String(loc[c]||'')+'] / Dispositivo: ['+String(imp[c]||'')+']');
-    });
+    resolverDiferencias(loc,imp,reporte,descripcion(loc,padreCod));
     if(!Array.isArray(loc.subtareas)) loc.subtareas=[];
     fusionarSubtareas(loc.subtareas, imp.subtareas||[], reporte, padreCod);
   });
 }
 function fusionarTareas(locales, importadas){
-  const reporte={tareasAnadidas:0,subtareasAnadidas:0,iguales:0,conflictos:[],codigosRenumerados:[]};
+  const reporte={tareasAnadidas:0,subtareasAnadidas:0,iguales:0,conflictos:[],codigosRenumerados:[],actualizadosPorFecha:0,mantenidosPorFecha:0,resueltos:[]};
   const codigosLocales=()=>new Set((locales||[]).map(t=>String(t.cod||'')).filter(Boolean));
   (importadas||[]).forEach(imp=>{
     const loc = locales.find(x=>x.id&&imp.id&&x.id===imp.id);
@@ -65,9 +81,8 @@ function fusionarTareas(locales, importadas){
       if(copia.cod && usados.has(String(copia.cod))){const old=copia.cod;copia.cod=siguienteCodigo(locales);reporte.codigosRenumerados.push(old+' → '+copia.cod+' (registro recibido: '+String(copia.texto||'').slice(0,60)+')')}
       locales.push(copia); reporte.tareasAnadidas++; return;
     }
-    let diferente=false;
-    ['texto','inicio','vence','fin','prioridad'].forEach(c=>{ if(campoDiferente(loc,imp,c)){diferente=true;reporte.conflictos.push(descripcion(loc)+' | campo '+c+' distinto. Servidor: ['+String(loc[c]||'')+'] / Dispositivo: ['+String(imp[c]||'')+']')} });
-    if(!diferente) reporte.iguales++;
+    const r=resolverDiferencias(loc,imp,reporte,descripcion(loc));
+    if(r==='igual') reporte.iguales++;
     if(!Array.isArray(loc.subtareas)) loc.subtareas=[];
     fusionarSubtareas(loc.subtareas, imp.subtareas||[], reporte, loc.cod||'');
   });
@@ -110,7 +125,7 @@ const server=http.createServer(async (req,res)=>{
     if(req.method==='GET' && pathname==='/favicon.ico') return send(res,204,'','text/plain; charset=utf-8');
     if(req.method==='GET' && pathname==='/api/status'){
       const data=leerDatos();
-      return send(res,200,{ok:true,nombre:'Notas de Tareas - servidor local',ip:ipsLocales().map(ip=>'http://'+ip+':'+PORT).join('  |  '),tareas:(data.tareas||[]).length,exportadoEn:data.exportadoEn});
+      return send(res,200,{ok:true,nombre:'Notas de Tareas - servidor local',ip:ipsLocales().map(ip=>'http://'+ip+':'+PORT).join('  |  '),tareas:(data.tareas||[]).length,exportadoEn:data.exportadoEn,version:data.version});
     }
     if(req.method==='GET' && pathname==='/api/data') return send(res,200,{ok:true,data:leerDatos()});
     if(req.method==='POST' && pathname==='/api/sync'){
@@ -145,5 +160,6 @@ server.listen(PORT,'0.0.0.0',()=>{
   console.log('');
   console.log('Deja esta ventana abierta mientras quieras sincronizar.');
   console.log('Datos del servidor:', DATA_FILE);
+  console.log('Regla de conflictos: gana ultimaModificacion mas reciente.');
   console.log('============================================================');
 });
