@@ -107,6 +107,7 @@ const server=http.createServer(async (req,res)=>{
   if(req.method==='OPTIONS') return send(res,204,{});
   const pathname=(req.url||'/').split('?')[0];
   try{
+    if(req.method==='GET' && pathname==='/favicon.ico') return send(res,204,'','text/plain; charset=utf-8');
     if(req.method==='GET' && pathname==='/api/status'){
       const data=leerDatos();
       return send(res,200,{ok:true,nombre:'Notas de Tareas - servidor local',ip:ipsLocales().map(ip=>'http://'+ip+':'+PORT).join('  |  '),tareas:(data.tareas||[]).length,exportadoEn:data.exportadoEn});
