@@ -17,23 +17,32 @@ COMO USARLO
 -----------
 1. Descomprime este ZIP en una carpeta del ordenador.
 2. Haz doble clic en ARRANCAR_SERVIDOR.bat.
-3. Se abrira la app en el ordenador y quedara una ventana negra abierta con el servidor.
-4. En esa ventana se mostrara una direccion parecida a:
+3. Se abrira una ventana negra del servidor y despues la app en el navegador.
+4. En la ventana negra se mostrara una direccion parecida a:
 
    http://192.168.1.50:8787
 
 5. En el movil, estando en la misma WiFi, abre esa direccion en el navegador.
-6. En la app pulsa Sync automatica.
-7. En IP / URL del servidor escribe la direccion del ordenador.
+6. En el ordenador o en el movil pulsa Sync automatica.
+7. En IP / URL del servidor debe aparecer o escribirse la direccion del ordenador.
 8. Pulsa Sincronizacion automatica.
 
-QUE HACE LA SINCRONIZACION
---------------------------
+QUE HACE LA SINCRONIZACION AL PULSAR EL BOTON
+---------------------------------------------
+- Lee los datos actuales del servidor.
 - Envia los registros del dispositivo al servidor del ordenador.
 - El servidor añade los registros que no tenga.
-- Devuelve al dispositivo los registros guardados en el servidor.
-- La app añade a ese dispositivo los registros que le falten.
+- El servidor devuelve todos los datos fusionados.
+- La app añade en ese dispositivo los registros que le falten.
 - Si encuentra el mismo registro con anotaciones distintas, avisa de conflicto y NO sobrescribe automaticamente.
+
+ORDEN RECOMENDADO LA PRIMERA VEZ
+--------------------------------
+1. Arranca el BAT en el ordenador.
+2. Abre la direccion del servidor en el dispositivo que tenga los datos mas completos.
+3. Pulsa Sincronizacion automatica para subir esos datos al servidor.
+4. Abre la direccion del servidor en el otro dispositivo.
+5. Pulsa Sincronizacion automatica para completar sus datos.
 
 IMPORTANTE
 ----------
@@ -42,3 +51,4 @@ IMPORTANTE
 - Si Windows Firewall pregunta, permite el acceso en red privada.
 - Esta sincronizacion es local, no sube los datos a internet.
 - Si abres index.html directamente con doble clic, la app funciona, pero para sincronizar con el movil debes arrancar el BAT.
+- Si el navegador usa una URL distinta, puede tener otro localStorage. Para sincronizar, usa siempre la direccion del servidor.
