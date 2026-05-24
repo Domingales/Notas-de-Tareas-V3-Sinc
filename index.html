@@ -182,17 +182,135 @@ function fusionarTareas(locales,importadas){const reporte={tareasAnadidas:0,subt
 function pintarInformeSync(reporte){const b=document.getElementById("syncReport");if(!b)return;let txt="SINCRONIZACIÓN FINALIZADA\n\n";txt+="Tareas nuevas añadidas: "+reporte.tareasAnadidas+"\n";txt+="Subtareas nuevas añadidas: "+reporte.subtareasAnadidas+"\n";txt+="Registros ya existentes sin cambios: "+reporte.iguales+"\n";if(reporte.codigosRenumerados.length){txt+="\nCÓDIGOS RENUMERADOS PARA EVITAR DUPLICADOS:\n- "+reporte.codigosRenumerados.join("\n- ")+"\n"}if(reporte.conflictos.length){txt+="\nCONFLICTOS DETECTADOS:\nNo se han sobrescrito los datos locales. Revisa estas diferencias manualmente si quieres conservar el valor importado.\n- "+reporte.conflictos.join("\n- ")}else{txt+="\nNo se han detectado conflictos."}b.style.display="block";b.className="sync-report "+(reporte.conflictos.length?"sync-warn":"sync-ok");b.textContent=txt}
 function sincronizarJSON(){const raw=document.getElementById("jsonBox").value.trim();if(!raw){alert("Pega primero el JSON del otro dispositivo en la caja.");return}try{const extraido=extraerDatosJSON(raw);if(!confirm("¿Sincronizar los datos pegados con los datos actuales? Se añadirán los registros que falten y NO se sobrescribirán conflictos."))return;const importadas=extraido.tareas;const reporte=fusionarTareas(tareas,importadas);if(extraido.data&&Array.isArray(extraido.data.historial)){const vistos=new Set(historial.map(h=>String(h.fechaISO||"")+"|"+String(h.texto||"")));extraido.data.historial.forEach(h=>{const k=String(h.fechaISO||"")+"|"+String(h.texto||"");if(!vistos.has(k)){historial.push(h);vistos.add(k)}});historial.sort((a,b)=>String(b.fechaISO||"").localeCompare(String(a.fechaISO||"")));if(historial.length>500)historial=historial.slice(0,500)}logAccion("Sincronización JSON: "+reporte.tareasAnadidas+" tareas y "+reporte.subtareasAnadidas+" subtareas añadidas; "+reporte.conflictos.length+" conflictos detectados.");guardarJSONSeguro(STORAGE_TAREAS,tareas);guardarJSONSeguro(STORAGE_HISTORIAL,historial);guardarJSONSeguro(STORAGE_ULTIMO_CAMBIO,ultimoCambio);render();pintarInformeSync(reporte);alert("Sincronización finalizada. Revisa el informe del panel.")}catch(e){const b=document.getElementById("syncReport");if(b){b.style.display="block";b.className="sync-report sync-error";b.textContent="JSON no válido: "+e.message}alert("JSON no válido: "+e.message)}}
 
-function getServidorSync(){return String(cargarJSONSeguro(STORAGE_SYNC_SERVER,"")||"").trim().replace(/\/+$/,"")}
-function setServidorSync(url){url=String(url||"").trim().replace(/\/+$/,"");if(url&&!/^https?:\/\//i.test(url))url="http://"+url;guardarJSONSeguro(STORAGE_SYNC_SERVER,url);const a=document.getElementById("syncServerUrl"),b=document.getElementById("ajusteSyncServerUrl");if(a)a.value=url;if(b)b.value=url;return url}
-function cargarServidorSyncEnPantalla(){const url=getServidorSync();const a=document.getElementById("syncServerUrl"),b=document.getElementById("ajusteSyncServerUrl");if(a)a.value=url;if(b)b.value=url}
+function normalizarUrlServidor(url){
+  url=String(url||"").trim();
+  if(!url && location.protocol && /^https?:$/i.test(location.protocol)) url=location.origin;
+  url=url.replace(/\s+/g,"").replace(/\/+$/,"");
+  if(url && !/^https?:\/\//i.test(url)) url="http://"+url;
+  try{
+    if(url){ const u=new URL(url); return u.origin; }
+  }catch(e){}
+  return url;
+}
+function construirUrlApi(base,ruta){
+  base=normalizarUrlServidor(base);
+  if(!base) throw new Error("No hay IP/URL del servidor configurada.");
+  return new URL(ruta, base+"/").toString();
+}
+function getServidorSync(){
+  const guardado=String(cargarJSONSeguro(STORAGE_SYNC_SERVER,"")||"").trim();
+  if(guardado) return normalizarUrlServidor(guardado);
+  if(location.protocol && /^https?:$/i.test(location.protocol)) return location.origin;
+  return "";
+}
+function setServidorSync(url){
+  url=normalizarUrlServidor(url);
+  guardarJSONSeguro(STORAGE_SYNC_SERVER,url);
+  const a=document.getElementById("syncServerUrl"),b=document.getElementById("ajusteSyncServerUrl");
+  if(a)a.value=url;
+  if(b)b.value=url;
+  return url;
+}
+function cargarServidorSyncEnPantalla(){
+  const url=getServidorSync();
+  const a=document.getElementById("syncServerUrl"),b=document.getElementById("ajusteSyncServerUrl");
+  if(a&&!a.value)a.value=url;
+  if(b&&!b.value)b.value=url;
+}
 function guardarServidorSync(){const url=setServidorSync(document.getElementById("syncServerUrl").value);alert(url?"IP del servidor guardada.":"IP del servidor vacía.")}
 function guardarServidorSyncDesdeAjustes(){const url=setServidorSync(document.getElementById("ajusteSyncServerUrl").value);alert(url?"IP del servidor guardada.":"IP del servidor vacía.")}
-function usarServidorActual(){const base=location.origin&&location.origin!=="null"?location.origin:"";if(!base){alert("Esta ventana está abierta como archivo local. Abre la app desde el servidor del ordenador para usar esta opción.");return}setServidorSync(base);alert("Se ha guardado esta dirección como servidor: "+base)}
-function copiarUrlActualServidor(){const base=location.origin&&location.origin!=="null"?location.origin:"";if(!base){alert("Esta ventana está abierta como archivo local; no hay URL de servidor que copiar.");return}copiarTexto(base,"URL del servidor copiada.")}
+function usarServidorActual(){
+  const base=(location.origin&&location.origin!=="null")?location.origin:"";
+  if(!base){alert("Esta ventana está abierta como archivo local. Arranca primero ARRANCAR_SERVIDOR.bat y abre la app desde http://localhost:8787/index.html.");return}
+  setServidorSync(base);alert("Se ha guardado esta dirección como servidor: "+base)
+}
+function copiarUrlActualServidor(){
+  const base=(location.origin&&location.origin!=="null")?location.origin:"";
+  if(!base){alert("Esta ventana está abierta como archivo local; no hay URL de servidor que copiar.");return}
+  copiarTexto(base,"URL del servidor copiada.")
+}
 function pintarInformeSyncAuto(txt,clase){const b=document.getElementById("syncAutoReport");if(!b)return;b.style.display="block";b.className="sync-report "+(clase||"");b.textContent=txt}
-async function probarServidorSync(){const url=setServidorSync(document.getElementById("syncServerUrl").value||getServidorSync());if(!url){alert("Escribe primero la IP / URL del servidor.");return}try{const r=await fetch(url+"/api/status",{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const data=await r.json();pintarInformeSyncAuto("CONEXIÓN CORRECTA\n\nServidor: "+(data.nombre||"Servidor local")+"\nIP informada: "+(data.ip||"no disponible")+"\nRegistros guardados en servidor: "+(data.tareas||0),"sync-ok")}catch(e){pintarInformeSyncAuto("NO SE PUDO CONECTAR\n\nRevisa que el ordenador tenga ARRANCAR_SERVIDOR.bat abierto, que móvil y ordenador estén en la misma WiFi, y que hayas escrito bien la IP.\n\nDetalle: "+e.message,"sync-error")}}
+async function probarServidorSync(){
+  const input=document.getElementById("syncServerUrl");
+  const url=setServidorSync((input&&input.value)||getServidorSync());
+  if(!url){alert("Escribe primero la IP / URL del servidor.");return}
+  try{
+    const r=await fetch(construirUrlApi(url,"/api/status"),{cache:"no-store"});
+    if(!r.ok)throw new Error("HTTP "+r.status);
+    const data=await r.json();
+    pintarInformeSyncAuto("CONEXIÓN CORRECTA\n\nServidor: "+(data.nombre||"Servidor local")+"\nIP informada: "+(data.ip||"no disponible")+"\nRegistros guardados en servidor: "+(data.tareas||0)+"\nÚltima actualización servidor: "+(data.exportadoEn||"sin datos"),"sync-ok")
+  }catch(e){
+    pintarInformeSyncAuto("NO SE PUDO CONECTAR\n\nRevisa que el ordenador tenga ARRANCAR_SERVIDOR.bat abierto, que móvil y ordenador estén en la misma WiFi, que el cortafuegos permita Node.js y que hayas escrito bien la IP.\n\nDetalle: "+e.message,"sync-error")
+  }
+}
 function fusionarHistorialDesdePaquete(data){if(!data||!Array.isArray(data.historial))return 0;let n=0;const vistos=new Set(historial.map(h=>String(h.fechaISO||"")+"|"+String(h.texto||"")));data.historial.forEach(h=>{const k=String(h.fechaISO||"")+"|"+String(h.texto||"");if(!vistos.has(k)){historial.push(h);vistos.add(k);n++}});historial.sort((a,b)=>String(b.fechaISO||"").localeCompare(String(a.fechaISO||"")));if(historial.length>500)historial=historial.slice(0,500);return n}
-async function sincronizarConServidor(){const input=document.getElementById("syncServerUrl");const url=setServidorSync((input&&input.value)||getServidorSync());if(!url){alert("Escribe primero la IP / URL del servidor del ordenador.");return}try{pintarInformeSyncAuto("Sincronizando con "+url+" ...","");const paquete=crearPaqueteDatos();const r=await fetch(url+"/api/sync",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(paquete)});if(!r.ok)throw new Error("HTTP "+r.status);const respuesta=await r.json();if(!respuesta.ok)throw new Error(respuesta.error||"Respuesta no válida del servidor");const antes=tareas.length;const reporte=fusionarTareas(tareas,normalizarTareasImportadas((respuesta.data&&respuesta.data.tareas)||[]));const histN=fusionarHistorialDesdePaquete(respuesta.data||{});logAccion("Sincronización automática con servidor: "+reporte.tareasAnadidas+" tareas y "+reporte.subtareasAnadidas+" subtareas añadidas; "+reporte.conflictos.length+" conflictos detectados.");guardarJSONSeguro(STORAGE_TAREAS,tareas);guardarJSONSeguro(STORAGE_HISTORIAL,historial);guardarJSONSeguro(STORAGE_ULTIMO_CAMBIO,ultimoCambio);render();let txt="SINCRONIZACIÓN AUTOMÁTICA FINALIZADA\n\nServidor: "+url+"\nTareas antes en esta app: "+antes+"\nTareas ahora en esta app: "+tareas.length+"\nTareas nuevas añadidas a esta app: "+reporte.tareasAnadidas+"\nSubtareas nuevas añadidas a esta app: "+reporte.subtareasAnadidas+"\nEntradas de historial añadidas: "+histN+"\nConflictos detectados en esta app: "+reporte.conflictos.length+"\nConflictos detectados por el servidor: "+((respuesta.reporte&&respuesta.reporte.conflictos&&respuesta.reporte.conflictos.length)||0);if(reporte.conflictos.length){txt+="\n\nCONFLICTOS EN ESTA APP:\n- "+reporte.conflictos.join("\n- ")}if(respuesta.reporte&&respuesta.reporte.conflictos&&respuesta.reporte.conflictos.length){txt+="\n\nCONFLICTOS EN EL SERVIDOR:\n- "+respuesta.reporte.conflictos.join("\n- ")}else if(!reporte.conflictos.length){txt+="\n\nNo se han detectado conflictos."}pintarInformeSyncAuto(txt,(reporte.conflictos.length||(respuesta.reporte&&respuesta.reporte.conflictos&&respuesta.reporte.conflictos.length))?"sync-warn":"sync-ok");alert("Sincronización automática finalizada. Revisa el informe.")}catch(e){pintarInformeSyncAuto("ERROR DE SINCRONIZACIÓN\n\n"+e.message+"\n\nComprueba que el servidor esté arrancado en el ordenador y que la IP sea correcta.","sync-error");alert("No se pudo sincronizar: "+e.message)}}
+function contarSubtareasLista(lista){let n=0;(lista||[]).forEach(s=>{n++;n+=contarSubtareasLista(s.subtareas||[])});return n}
+function resumenServidor(data){const ts=(data&&Array.isArray(data.tareas))?data.tareas:[];return ts.length+" tareas / "+contarSubtareasLista(ts)+" subtareas"}
+async function obtenerDatosServidor(url){
+  const r=await fetch(construirUrlApi(url,"/api/data"),{cache:"no-store"});
+  if(!r.ok)throw new Error("HTTP "+r.status);
+  const j=await r.json();
+  if(!j.ok)throw new Error(j.error||"Respuesta no válida del servidor");
+  return j.data||{};
+}
+async function enviarDatosAlServidor(url,paquete){
+  const r=await fetch(construirUrlApi(url,"/api/sync"),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(paquete)});
+  if(!r.ok)throw new Error("HTTP "+r.status);
+  const j=await r.json();
+  if(!j.ok)throw new Error(j.error||"Respuesta no válida del servidor");
+  return j;
+}
+async function sincronizarConServidor(){
+  const input=document.getElementById("syncServerUrl");
+  const url=setServidorSync((input&&input.value)||getServidorSync());
+  if(!url){alert("Escribe primero la IP / URL del servidor del ordenador.");return}
+  try{
+    pintarInformeSyncAuto("Sincronizando con "+url+" ...\n\n1/3 Leyendo datos del servidor...","");
+    const antesLocal=tareas.length;
+    const dataAntesServidor=await obtenerDatosServidor(url);
+    const resumenAntesServidor=resumenServidor(dataAntesServidor);
+
+    pintarInformeSyncAuto("Sincronizando con "+url+" ...\n\n2/3 Enviando datos de esta app al servidor...","");
+    const respuesta=await enviarDatosAlServidor(url,crearPaqueteDatos());
+
+    pintarInformeSyncAuto("Sincronizando con "+url+" ...\n\n3/3 Recibiendo datos fusionados del servidor...","");
+    const dataServidor=respuesta.data||{};
+    const reporteLocal=fusionarTareas(tareas,normalizarTareasImportadas(dataServidor.tareas||[]));
+    const histN=fusionarHistorialDesdePaquete(dataServidor);
+
+    if(dataServidor.ultimoCambio && (!ultimoCambio || String(dataServidor.ultimoCambio.fechaISO||"")>String(ultimoCambio.fechaISO||""))) ultimoCambio=dataServidor.ultimoCambio;
+    guardarJSONSeguro(STORAGE_TAREAS,tareas);
+    guardarJSONSeguro(STORAGE_HISTORIAL,historial);
+    guardarJSONSeguro(STORAGE_ULTIMO_CAMBIO,ultimoCambio);
+    render();
+
+    const conflictosServidor=(respuesta.reporte&&Array.isArray(respuesta.reporte.conflictos))?respuesta.reporte.conflictos:[];
+    let txt="SINCRONIZACIÓN AUTOMÁTICA FINALIZADA\n\n";
+    txt+="Servidor usado: "+url+"\n";
+    txt+="Servidor antes: "+resumenAntesServidor+"\n";
+    txt+="Servidor después: "+resumenServidor(dataServidor)+"\n\n";
+    txt+="Esta app antes: "+antesLocal+" tareas\n";
+    txt+="Esta app ahora: "+tareas.length+" tareas\n";
+    txt+="Añadido a esta app: "+reporteLocal.tareasAnadidas+" tareas y "+reporteLocal.subtareasAnadidas+" subtareas\n";
+    txt+="Añadido al servidor: "+((respuesta.reporte&&respuesta.reporte.tareasAnadidas)||0)+" tareas y "+((respuesta.reporte&&respuesta.reporte.subtareasAnadidas)||0)+" subtareas\n";
+    txt+="Historial añadido a esta app: "+histN+" entradas\n";
+    txt+="Historial añadido al servidor: "+((respuesta.reporte&&respuesta.reporte.historialAnadido)||0)+" entradas\n";
+    txt+="Conflictos en esta app: "+reporteLocal.conflictos.length+"\n";
+    txt+="Conflictos en servidor: "+conflictosServidor.length+"\n";
+    if(reporteLocal.codigosRenumerados&&reporteLocal.codigosRenumerados.length){txt+="\nCÓDIGOS RENUMERADOS EN ESTA APP:\n- "+reporteLocal.codigosRenumerados.join("\n- ")+"\n"}
+    if(respuesta.reporte&&respuesta.reporte.codigosRenumerados&&respuesta.reporte.codigosRenumerados.length){txt+="\nCÓDIGOS RENUMERADOS EN SERVIDOR:\n- "+respuesta.reporte.codigosRenumerados.join("\n- ")+"\n"}
+    if(reporteLocal.conflictos.length){txt+="\nCONFLICTOS EN ESTA APP:\n- "+reporteLocal.conflictos.join("\n- ")}
+    if(conflictosServidor.length){txt+="\n\nCONFLICTOS EN EL SERVIDOR:\n- "+conflictosServidor.join("\n- ")}
+    if(!reporteLocal.conflictos.length&&!conflictosServidor.length){txt+="\nNo se han detectado conflictos."}
+    logAccion("Sincronización automática completada con "+url+": "+reporteLocal.tareasAnadidas+" tareas añadidas en esta app; "+(((respuesta.reporte&&respuesta.reporte.tareasAnadidas)||0))+" tareas añadidas al servidor; "+(reporteLocal.conflictos.length+conflictosServidor.length)+" conflictos.");
+    guardarJSONSeguro(STORAGE_HISTORIAL,historial);
+    pintarInformeSyncAuto(txt,(reporteLocal.conflictos.length||conflictosServidor.length)?"sync-warn":"sync-ok");
+    alert("Sincronización automática finalizada. Revisa el informe.")
+  }catch(e){
+    pintarInformeSyncAuto("ERROR DE SINCRONIZACIÓN\n\n"+e.message+"\n\nComprueba que el servidor esté arrancado en el ordenador, que la IP sea correcta y que el móvil y el ordenador estén en la misma red WiFi.","sync-error");
+    alert("No se pudo sincronizar: "+e.message)
+  }
+}
 function normalizarSubtareas(lista){if(!Array.isArray(lista))return[];return lista.map(s=>typeof s==="string"?{id:generarId(),cod:"",texto:s,inicio:"",vence:"",fin:"",prioridad:"media",subtareas:[]}:{id:s.id||generarId(),cod:s.cod||"",texto:String(s.texto||""),inicio:s.inicio||"",vence:s.vence||"",fin:s.fin||"",prioridad:["baja","media","alta","critica"].includes(s.prioridad)?s.prioridad:"media",subtareas:normalizarSubtareas(s.subtareas||s.subs)})}
 function normalizarTareasImportadas(lista){return lista.map((t,i)=>({id:t.id||generarId(),cod:String(t.cod||String(i+1).padStart(4,"0")).slice(-4).padStart(4,"0"),texto:String(t.texto||t.tarea||"Sin texto"),inicio:t.inicio||"",vence:t.vence||"",fin:t.fin||"",prioridad:["baja","media","alta","critica"].includes(t.prioridad)?t.prioridad:"media",subtareas:normalizarSubtareas(t.subtareas||t.subs)}))}
 function exportarExcel(){let txt="INICIO\tVENCE\tFIN\tCOD\tTAREA\tPRIORIDAD\tESTADO\n";function addSubExcel(lista,nivel){(lista||[]).forEach(s=>{txt+=[s.inicio||"",s.vence||"",s.fin||"","",("  ".repeat(nivel))+"└─ "+limpiarTSV(s.texto),s.prioridad||"",getEstado(s).texto].join("\t")+"\n";addSubExcel(s.subtareas,nivel+1)})}tareas.forEach(t=>{txt+=[t.inicio||"",t.vence||"",t.fin||"",t.cod||"",limpiarTSV(t.texto),t.prioridad||"",getEstado(t).texto].join("\t")+"\n";addSubExcel(t.subtareas,1)});copiarTexto(txt,"Tabla copiada para pegar en Excel.")}
