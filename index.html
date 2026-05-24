@@ -246,6 +246,23 @@ async function probarServidorSync(){
 function fusionarHistorialDesdePaquete(data){if(!data||!Array.isArray(data.historial))return 0;let n=0;const vistos=new Set(historial.map(h=>String(h.fechaISO||"")+"|"+String(h.texto||"")));data.historial.forEach(h=>{const k=String(h.fechaISO||"")+"|"+String(h.texto||"");if(!vistos.has(k)){historial.push(h);vistos.add(k);n++}});historial.sort((a,b)=>String(b.fechaISO||"").localeCompare(String(a.fechaISO||"")));if(historial.length>500)historial=historial.slice(0,500);return n}
 function contarSubtareasLista(lista){let n=0;(lista||[]).forEach(s=>{n++;n+=contarSubtareasLista(s.subtareas||[])});return n}
 function resumenServidor(data){const ts=(data&&Array.isArray(data.tareas))?data.tareas:[];return ts.length+" tareas / "+contarSubtareasLista(ts)+" subtareas"}
+
+function crearPaqueteDatos(){
+  asegurarUltimoCambioInicial();
+  // Paquete completo que se envía al servidor del ordenador.
+  // Se clona para evitar que la fusión modifique objetos por referencia.
+  const paquete={
+    version:"v3-servidor",
+    app:"Notas de Tareas",
+    exportadoEn:new Date().toISOString(),
+    ultimoCambio:ultimoCambio||null,
+    tareas:normalizarTareasImportadas(clonarRegistro(tareas||[])),
+    historial:Array.isArray(historial)?clonarRegistro(historial):[],
+    filtros:clonarRegistro(filtros||{}),
+    ajustes:clonarRegistro(ajustes||{})
+  };
+  return paquete;
+}
 async function obtenerDatosServidor(url){
   const r=await fetch(construirUrlApi(url,"/api/data"),{cache:"no-store"});
   if(!r.ok)throw new Error("HTTP "+r.status);
