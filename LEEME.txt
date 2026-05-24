@@ -1,0 +1,57 @@
+APP NOTAS DE TAREAS - VERSION ACTUALIZADA V6
+
+Archivo principal:
+- index.html
+
+Mejora nueva:
+- Añadido desplegable de filtro en el encabezado PRIORIDAD.
+- El filtro de PRIORIDAD permite marcar una, varias, todas o ninguna opción: baja, media, alta, crítica.
+- Añadido desplegable de filtro en el encabezado ESTADO.
+- El filtro de ESTADO permite marcar una, varias, todas o ninguna opción: PENDIENTE, INICIADA, VENCIDA, FINALIZADA.
+- Los nuevos filtros son combinables con los filtros existentes de texto, días, INICIO, VENCE y FIN.
+- Los filtros de prioridad y estado quedan guardados en localStorage y se restauran al abrir la app.
+
+Mejoras incluidas de versiones anteriores:
+- Las subtareas funcionan como tareas completas.
+- Cada subtarea tiene fecha INICIO, fecha VENCE, fecha FIN, prioridad y estado automático.
+- Cada subtarea muestra estado FINALIZADA, VENCIDA, INICIADA o PENDIENTE según sus fechas.
+- Las subtareas mantienen los botones de acción: + para crear subtarea interna, editar y eliminar.
+- Las subtareas internas también heredan estas mismas opciones.
+- La exportación a Excel incluye las fechas, prioridad y estado de subtareas y subtareas internas.
+- Las subtareas creadas incluyen botón "+" para crear subtareas dentro.
+- Las subtareas internas se muestran de forma jerárquica e indentada.
+- Al eliminar una subtarea, también se eliminan sus subtareas internas.
+- Filtro 'Faltan menos de' en una sola línea.
+- Columna CODIGO ajustada para leer el título completo.
+- Columna ACCIONES ajustada para leer el título completo.
+- Columnas INICIO, VENCE y FIN ajustadas para leer título + ✔ + ✖.
+- Tabla compacta tipo imagen de referencia.
+- Botón + en cabecera TAREA y botón Nueva tarea.
+- Códigos automáticos 0001, 0002...
+- Edición y eliminación de tareas.
+- Estados automáticos: FINALIZADA, VENCIDA, INICIADA, PENDIENTE.
+- Colores por estado.
+- Filtro por texto, por días y por aspas.
+- Filtros combinables y persistentes.
+- Fechas editables con calendario.
+- Prioridades: baja, media, alta, crítica.
+- Exportar / importar JSON por copiar y pegar.
+- Exportación TSV para Excel con tareas y subtareas.
+- Impresión optimizada sin ACCIONES.
+- Panel de Ajustes y panel de Historial.
+- Historial de creación, edición y eliminación.
+- Modo 2D / 3D, 5 colores y escala compacta/normal/grande.
+- Aviso de vencimiento e integración Android WebView con Android.lanzarAlarma().
+- Escape HTML, validación de JSON y control básico de errores.
+
+Actualización v18 sincronización manual JSON
+-------------------------------------------
+Se añade un botón "Sincronizar" en la barra superior.
+Funcionamiento:
+1. En el dispositivo que tenga los datos a llevar al otro, abrir JSON y pulsar "Copiar JSON".
+2. En el otro dispositivo, abrir "Sincronizar", pegar el JSON en la caja y pulsar "Sincronizar desde caja".
+3. La app añade tareas y subtareas que no existan todavía.
+4. Si encuentra el mismo registro con datos distintos, no sobrescribe automáticamente. Muestra un informe de conflictos para revisarlo manualmente.
+5. La opción antigua de importación completa sigue disponible como "Importar sustituyendo".
+
+Esta sincronización es manual por seguridad y porque la app sigue funcionando en localStorage, sin servidor externo.
