@@ -1,13 +1,14 @@
 @echo off
 chcp 65001 >nul
 cd /d "%~dp0"
-title Servidor local - Notas de Tareas
+title Arranque - Notas de Tareas
 
 echo ============================================================
-echo  NOTAS DE TAREAS - SERVIDOR LOCAL DE SINCRONIZACION
+echo  NOTAS DE TAREAS - ARRANQUE DE SERVIDOR LOCAL
 echo ============================================================
 echo.
-echo Esta ventana debe quedarse abierta mientras uses la sincronizacion.
+echo Este BAT arrancara el ordenador como servidor local y despues
+echo abrira la app en el navegador del ordenador.
 echo.
 
 where node >nul 2>nul
@@ -21,11 +22,18 @@ if errorlevel 1 (
   exit /b 1
 )
 
-echo Arrancando servidor local...
-echo.
+echo Arrancando servidor local en una ventana nueva...
+start "Servidor local - Notas de Tareas" cmd /k "cd /d "%~dp0" && node sync-server.js"
+
+echo Esperando unos segundos a que el servidor quede preparado...
+timeout /t 2 /nobreak >nul
+
+echo Abriendo la app en el ordenador...
 start "" "http://localhost:8787/index.html"
-node "%~dp0sync-server.js"
 
 echo.
-echo El servidor se ha cerrado.
+echo LISTO.
+echo Deja abierta la ventana titulada "Servidor local - Notas de Tareas".
+echo En el movil usa la IP que muestra esa ventana, por ejemplo:
+echo http://192.168.1.50:8787
 pause
