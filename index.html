@@ -341,6 +341,100 @@ function actualizarOffsetCabecera(){const tb=document.querySelector(".topbar");i
 function cargarFiltrosEnPantalla(){document.getElementById("textoFiltro").value=filtros.texto||"";document.getElementById("diasFiltro").value=filtros.dias||"";cargarMultiFiltrosEnPantalla();actualizarOffsetCabecera()}
 window.addEventListener("resize",actualizarOffsetCabecera);
 window.addEventListener("load",()=>{if(!Array.isArray(filtros.prioridades))filtros.prioridades=[];if(!Array.isArray(filtros.estados))filtros.estados=[];tareas=normalizarTareasImportadas(tareas);guardarJSONSeguro(STORAGE_TAREAS,tareas);asegurarUltimoCambioInicial();aplicarAjustes();cargarServidorSyncEnPantalla();cargarFiltrosEnPantalla();actualizarOffsetCabecera();render()});
+
+
+/* ============================================================
+   V23 - Sincronización por última modificación
+   ------------------------------------------------------------
+   Regla aplicada: si el mismo registro existe en dos dispositivos
+   con campos distintos, gana automáticamente la versión con
+   ultimaModificacion más reciente. Si no hay fecha válida o empatan,
+   se informa como conflicto y no se sobrescribe.
+   ============================================================ */
+function fechaSyncValida(v){const t=Date.parse(String(v||""));return Number.isFinite(t)?t:0}
+function isoAhora(){return new Date().toISOString()}
+function tocarRegistro(r){if(r&&typeof r==="object")r.ultimaModificacion=isoAhora();return r}
+function timestampInicialParaRegistro(r){
+  const posibles=[r&&r.ultimaModificacion,r&&r.modificadoEn,r&&r.updatedAt,r&&r.fechaModificacion];
+  for(const v of posibles){if(fechaSyncValida(v))return new Date(fechaSyncValida(v)).toISOString()}
+  return "1970-01-01T00:00:00.000Z";
+}
+function normalizarSubtareas(lista){
+  if(!Array.isArray(lista))return[];
+  return lista.map(s=>{
+    if(typeof s==="string")return{id:generarId(),cod:"",texto:s,inicio:"",vence:"",fin:"",prioridad:"media",ultimaModificacion:isoAhora(),subtareas:[]};
+    return{id:s.id||generarId(),cod:s.cod||"",texto:String(s.texto||""),inicio:s.inicio||"",vence:s.vence||"",fin:s.fin||"",prioridad:["baja","media","alta","critica"].includes(s.prioridad)?s.prioridad:"media",ultimaModificacion:timestampInicialParaRegistro(s),subtareas:normalizarSubtareas(s.subtareas||s.subs)};
+  })
+}
+function normalizarTareasImportadas(lista){
+  if(!Array.isArray(lista))return[];
+  return lista.map((t,i)=>({id:t.id||generarId(),cod:String(t.cod||String(i+1).padStart(4,"0")).slice(-4).padStart(4,"0"),texto:String(t.texto||t.tarea||"Sin texto"),inicio:t.inicio||"",vence:t.vence||"",fin:t.fin||"",prioridad:["baja","media","alta","critica"].includes(t.prioridad)?t.prioridad:"media",ultimaModificacion:timestampInicialParaRegistro(t),subtareas:normalizarSubtareas(t.subtareas||t.subs)}))
+}
+function promoverUltimaTareaEditadaEnMigracion(){
+  try{
+    if(!ultimoCambio||!ultimoCambio.fechaISO||!ultimoCambio.texto)return;
+    const m=String(ultimoCambio.texto).match(/(?:tarea|en)\s+(\d{4})/i);
+    if(!m)return;
+    const cod=m[1];
+    const t=tareas.find(x=>String(x.cod||"")===cod);
+    if(t&&(!fechaSyncValida(t.ultimaModificacion)||t.ultimaModificacion==="1970-01-01T00:00:00.000Z")){
+      t.ultimaModificacion=ultimoCambio.fechaISO;
+      guardarJSONSeguro(STORAGE_TAREAS,tareas);
+    }
+  }catch(e){}
+}
+function nuevaTarea(){const texto=prompt("Texto de la nueva tarea:");if(!texto||!texto.trim())return;const t=tocarRegistro({id:generarId(),cod:siguienteCodigo(),texto:texto.trim(),inicio:"",vence:"",fin:"",prioridad:"media",subtareas:[]});tareas.unshift(t);logAccion("Creada tarea "+t.cod+": "+t.texto);guardarTareasYRender()}
+function editarTarea(id){const t=tareas.find(x=>x.id===id);if(!t)return;const n=prompt("Editar tarea:",t.texto);if(!n||!n.trim())return;const a=t.texto;t.texto=n.trim();tocarRegistro(t);logAccion("Editada tarea "+t.cod+": "+a+" → "+t.texto);guardarTareasYRender()}
+function eliminarTarea(id){const i=tareas.findIndex(x=>x.id===id);if(i<0)return;if(!confirm("¿Eliminar esta tarea y sus subtareas?"))return;const t=tareas[i];tareas.splice(i,1);logAccion("Eliminada tarea "+t.cod+": "+t.texto);guardarTareasYRender()}
+function addSubtarea(id){const t=tareas.find(x=>x.id===id);if(!t)return;const texto=prompt("Nueva subtarea:");if(!texto||!texto.trim())return;if(!Array.isArray(t.subtareas))t.subtareas=[];t.subtareas.push(tocarRegistro({id:generarId(),cod:"",texto:texto.trim(),inicio:"",vence:"",fin:"",prioridad:"media",subtareas:[]}));tocarRegistro(t);logAccion("Añadida subtarea en "+t.cod+": "+texto.trim());guardarTareasYRender()}
+function addSubtareaDentro(tid,sid){const t=tareas.find(x=>x.id===tid);if(!t)return;const padre=buscarSubtarea(t.subtareas,sid);if(!padre)return;const texto=prompt("Nueva subtarea dentro de esta subtarea:");if(!texto||!texto.trim())return;if(!Array.isArray(padre.subtareas))padre.subtareas=[];padre.subtareas.push(tocarRegistro({id:generarId(),cod:"",texto:texto.trim(),inicio:"",vence:"",fin:"",prioridad:"media",subtareas:[]}));tocarRegistro(padre);tocarRegistro(t);logAccion("Añadida subtarea dentro de subtarea en "+t.cod+": "+texto.trim());guardarTareasYRender()}
+function editarSubtarea(tid,sid){const t=tareas.find(x=>x.id===tid);if(!t||!Array.isArray(t.subtareas))return;const s=buscarSubtarea(t.subtareas,sid);if(!s)return;const n=prompt("Editar subtarea:",s.texto);if(!n||!n.trim())return;const a=s.texto;s.texto=n.trim();tocarRegistro(s);tocarRegistro(t);logAccion("Editada subtarea en "+t.cod+": "+a+" → "+s.texto);guardarTareasYRender()}
+function eliminarSubtarea(tid,sid){const t=tareas.find(x=>x.id===tid);if(!t||!Array.isArray(t.subtareas))return;if(!confirm("¿Eliminar esta subtarea y sus subtareas internas?"))return;const s=eliminarSubtareaRec(t.subtareas,sid);if(!s)return;tocarRegistro(t);logAccion("Eliminada subtarea en "+t.cod+": "+s.texto);guardarTareasYRender()}
+function actualizarCampo(id,campo,valor){const t=tareas.find(x=>x.id===id);if(!t)return;const a=t[campo]??"";if(String(a)===String(valor))return;t[campo]=valor;tocarRegistro(t);logAccion("Actualizado "+campo+" en "+t.cod+": "+a+" → "+valor);guardarTareasYRender()}
+function actualizarCampoSubtarea(tid,sid,campo,valor){const t=tareas.find(x=>x.id===tid);if(!t)return;const s=buscarSubtarea(t.subtareas,sid);if(!s)return;const a=s[campo]??"";if(String(a)===String(valor))return;s[campo]=valor;tocarRegistro(s);tocarRegistro(t);logAccion("Actualizado "+campo+" en subtarea de "+t.cod+": "+a+" → "+valor);guardarTareasYRender()}
+function prepararJSON(){asegurarUltimoCambioInicial();tareas=normalizarTareasImportadas(tareas);const data={version:5,app:"Notas de Tareas",fechaExportacion:new Date().toISOString(),ultimoCambio,tareas,historial,filtros,ajustes};document.getElementById("jsonBox").value=JSON.stringify(data,null,2)}
+function copiarCamposRegistro(dest,src){["texto","inicio","vence","fin","prioridad","ultimaModificacion"].forEach(c=>{dest[c]=src[c]!==undefined?src[c]:""})}
+function resolverDiferenciasRegistro(loc,imp,reporte,desc){
+  const campos=["texto","inicio","vence","fin","prioridad"];
+  const difs=campos.filter(c=>campoDiferente(loc,imp,c));
+  if(!difs.length)return "igual";
+  const tl=fechaSyncValida(loc.ultimaModificacion), ti=fechaSyncValida(imp.ultimaModificacion);
+  if(ti>tl){copiarCamposRegistro(loc,imp);reporte.actualizadosPorFecha++;reporte.resueltos.push(desc+" actualizado con versión más reciente recibida ("+imp.ultimaModificacion+")");return "actualizado"}
+  if(tl>ti){reporte.mantenidosPorFecha++;reporte.resueltos.push(desc+" mantiene versión local más reciente ("+loc.ultimaModificacion+")");return "mantenido"}
+  difs.forEach(c=>reporte.conflictos.push(desc+" | campo "+c+" distinto sin fecha más reciente clara. Local: ["+String(loc[c]||"")+"] / Recibido: ["+String(imp[c]||"")+"]."));
+  return "conflicto";
+}
+function fusionarSubtareas(localLista,importLista,reporte,padreCod){
+  if(!Array.isArray(localLista))localLista=[];
+  (importLista||[]).forEach(imp=>{
+    const loc=localLista.find(x=>x.id&&imp.id&&x.id===imp.id);
+    if(!loc){localLista.push(clonarRegistro(imp));reporte.subtareasAnadidas++;return}
+    resolverDiferenciasRegistro(loc,imp,reporte,descripcionRegistro(loc,padreCod));
+    if(!Array.isArray(loc.subtareas))loc.subtareas=[];
+    fusionarSubtareas(loc.subtareas,imp.subtareas||[],reporte,padreCod)
+  })
+}
+function fusionarTareas(locales,importadas){
+  const reporte={tareasAnadidas:0,subtareasAnadidas:0,iguales:0,conflictos:[],codigosRenumerados:[],actualizadosPorFecha:0,mantenidosPorFecha:0,resueltos:[]};
+  const codigosLocales=()=>new Set((locales||[]).map(t=>String(t.cod||"")).filter(Boolean));
+  (importadas||[]).forEach(imp=>{
+    const loc=locales.find(x=>x.id&&imp.id&&x.id===imp.id);
+    if(!loc){
+      const copia=clonarRegistro(imp);const usados=codigosLocales();
+      if(copia.cod&&usados.has(String(copia.cod))){const old=copia.cod;copia.cod=siguienteCodigoDesdeLista(locales);reporte.codigosRenumerados.push(old+" → "+copia.cod+" (registro recibido: "+String(copia.texto||"").slice(0,60)+")")}
+      locales.push(copia);reporte.tareasAnadidas++;return
+    }
+    const r=resolverDiferenciasRegistro(loc,imp,reporte,descripcionRegistro(loc));
+    if(r==="igual")reporte.iguales++;
+    if(!Array.isArray(loc.subtareas))loc.subtareas=[];
+    fusionarSubtareas(loc.subtareas,imp.subtareas||[],reporte,loc.cod||"")
+  });
+  return reporte
+}
+function pintarInformeSync(reporte){const b=document.getElementById("syncReport");if(!b)return;let txt="SINCRONIZACIÓN FINALIZADA\n\n";txt+="Tareas nuevas añadidas: "+reporte.tareasAnadidas+"\n";txt+="Subtareas nuevas añadidas: "+reporte.subtareasAnadidas+"\n";txt+="Registros actualizados por fecha más reciente: "+(reporte.actualizadosPorFecha||0)+"\n";txt+="Registros mantenidos por ser más recientes aquí: "+(reporte.mantenidosPorFecha||0)+"\n";txt+="Registros ya existentes sin cambios: "+reporte.iguales+"\n";if(reporte.codigosRenumerados.length){txt+="\nCÓDIGOS RENUMERADOS PARA EVITAR DUPLICADOS:\n- "+reporte.codigosRenumerados.join("\n- ")+"\n"}if(reporte.resueltos&&reporte.resueltos.length){txt+="\nDIFERENCIAS RESUELTAS AUTOMÁTICAMENTE:\n- "+reporte.resueltos.slice(0,30).join("\n- ")+(reporte.resueltos.length>30?"\n- ...":"")}if(reporte.conflictos.length){txt+="\n\nCONFLICTOS SIN RESOLVER:\n- "+reporte.conflictos.join("\n- ")}else{txt+="\n\nNo quedan conflictos sin resolver."}b.style.display="block";b.className="sync-report "+(reporte.conflictos.length?"sync-warn":"sync-ok");b.textContent=txt}
+function sincronizarJSON(){const raw=document.getElementById("jsonBox").value.trim();if(!raw){alert("Pega primero el JSON del otro dispositivo en la caja.");return}try{const extraido=extraerDatosJSON(raw);if(!confirm("¿Sincronizar los datos pegados con los datos actuales? Si hay diferencias, ganará automáticamente la versión con última modificación más reciente."))return;const importadas=extraido.tareas;const reporte=fusionarTareas(tareas,importadas);if(extraido.data&&Array.isArray(extraido.data.historial)){const vistos=new Set(historial.map(h=>String(h.fechaISO||"")+"|"+String(h.texto||"")));extraido.data.historial.forEach(h=>{const k=String(h.fechaISO||"")+"|"+String(h.texto||"");if(!vistos.has(k)){historial.push(h);vistos.add(k)}});historial.sort((a,b)=>String(b.fechaISO||"").localeCompare(String(a.fechaISO||"")));if(historial.length>500)historial=historial.slice(0,500)}logAccion("Sincronización JSON: "+reporte.tareasAnadidas+" tareas añadidas; "+(reporte.actualizadosPorFecha||0)+" registros actualizados por fecha; "+reporte.conflictos.length+" conflictos sin resolver.");guardarJSONSeguro(STORAGE_TAREAS,tareas);guardarJSONSeguro(STORAGE_HISTORIAL,historial);guardarJSONSeguro(STORAGE_ULTIMO_CAMBIO,ultimoCambio);render();pintarInformeSync(reporte);alert("Sincronización finalizada. Revisa el informe del panel.")}catch(e){const b=document.getElementById("syncReport");if(b){b.style.display="block";b.className="sync-report sync-error";b.textContent="JSON no válido: "+e.message}alert("JSON no válido: "+e.message)}}
+window.addEventListener("load",()=>{setTimeout(()=>{promoverUltimaTareaEditadaEnMigracion();tareas=normalizarTareasImportadas(tareas);guardarJSONSeguro(STORAGE_TAREAS,tareas);render()},0)});
+
 </script>
 </body>
 </html>
