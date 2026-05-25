@@ -1,0 +1,1616 @@
+{
+  "version": "v3-servidor-v23",
+  "exportadoEn": "2026-05-24T20:58:12.322Z",
+  "tareas": [
+    {
+      "id": "id_mpk7l4m9_s07f7v",
+      "cod": "0034",
+      "texto": "App para sincronizar con Lucia alarma",
+      "inicio": "2026-05-24",
+      "vence": "2026-06-07",
+      "fin": "",
+      "prioridad": "media",
+      "ultimaModificacion": "2026-05-24T20:57:55.824Z",
+      "subtareas": []
+    },
+    {
+      "id": "id_mpa52vh3_apkiua",
+      "cod": "0033",
+      "texto": "App a play store",
+      "inicio": "2026-05-18",
+      "vence": "2026-05-22",
+      "fin": "",
+      "prioridad": "alta",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": []
+    },
+    {
+      "id": "id_mpa50uk8_0yavwc",
+      "cod": "0032",
+      "texto": "Macetero para Rosa",
+      "inicio": "2026-05-18",
+      "vence": "2026-05-29",
+      "fin": "",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": []
+    },
+    {
+      "id": "id_mp9plj5e_welya3",
+      "cod": "0031",
+      "texto": "Quitar pila del patio",
+      "inicio": "2026-05-18",
+      "vence": "2026-05-22",
+      "fin": "",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": []
+    },
+    {
+      "id": "id_mp9pjywv_svh74z",
+      "cod": "0030",
+      "texto": "Enfoscar patio con cemento blanco",
+      "inicio": "2026-05-18",
+      "vence": "2026-05-20",
+      "fin": "",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": [
+        {
+          "id": "id_mp9pkezp_8abcgj",
+          "cod": "",
+          "texto": "Comprar cemento blanco",
+          "inicio": "2026-05-18",
+          "vence": "2026-05-18",
+          "fin": "",
+          "prioridad": "media",
+          "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+          "subtareas": []
+        }
+      ]
+    },
+    {
+      "id": "tmohfzvsjdn5ih",
+      "cod": "0001",
+      "texto": "Desatascar pocillo patio",
+      "inicio": "2026-04-01",
+      "vence": "2026-05-01",
+      "fin": "2026-05-01",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": []
+    },
+    {
+      "id": "tmohfzvsjvmcqh",
+      "cod": "0002",
+      "texto": "Regalo boda Daniel",
+      "inicio": "2026-01-24",
+      "vence": "2026-07-03",
+      "fin": "",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": []
+    },
+    {
+      "id": "tmoi9fk2mtfpqp",
+      "cod": "0003",
+      "texto": "Echar herbicida en la balsa",
+      "inicio": "2026-04-01",
+      "vence": "2026-04-30",
+      "fin": "2026-05-05",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": []
+    },
+    {
+      "id": "tmoi9h8wm2lzme",
+      "cod": "0004",
+      "texto": "Llamar a Raimundo tornero Valverde para ir a recoger rodillos.",
+      "inicio": "2026-04-17",
+      "vence": "2026-05-15",
+      "fin": "2026-05-04",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": [
+        {
+          "id": "id_mojzxa3d_1iq73f",
+          "cod": "",
+          "texto": "Los 2 rodillos están listos.",
+          "inicio": "2026-04-29",
+          "vence": "2026-05-01",
+          "fin": "2026-05-04",
+          "prioridad": "media",
+          "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+          "subtareas": [
+            {
+              "id": "id_mojzy9ox_wewcvq",
+              "cod": "",
+              "texto": "desmontar rodillo hoja para llevárselo o no",
+              "inicio": "2026-04-30",
+              "vence": "2026-05-01",
+              "fin": "2026-05-04",
+              "prioridad": "media",
+              "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+              "subtareas": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tmoi9ijqzxzf71",
+      "cod": "0005",
+      "texto": "Revisar compresores.",
+      "inicio": "2026-04-01",
+      "vence": "2026-05-15",
+      "fin": "2026-05-15",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": []
+    },
+    {
+      "id": "tmoi9lshd7xuxs",
+      "cod": "0006",
+      "texto": "Flis para herbicida mi tejado",
+      "inicio": "2026-04-28",
+      "vence": "2026-04-30",
+      "fin": "2026-05-07",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": []
+    },
+    {
+      "id": "tmoine7cazv53k",
+      "cod": "0007",
+      "texto": "Reparar desbrozadora.",
+      "inicio": "2026-04-28",
+      "vence": "2026-04-30",
+      "fin": "2026-04-30",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": [
+        {
+          "id": "id_mojriee8_uwsmhh",
+          "cod": "",
+          "texto": "Jacinto pide varilla",
+          "inicio": "2026-04-29",
+          "vence": "2026-05-04",
+          "fin": "2026-04-30",
+          "prioridad": "media",
+          "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+          "subtareas": []
+        }
+      ]
+    },
+    {
+      "id": "id_mojykopa_mzw29h",
+      "cod": "0010",
+      "texto": "Comida granjeros 16-5-26",
+      "inicio": "2026-04-29",
+      "vence": "2026-05-15",
+      "fin": "2026-05-16",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": [
+        {
+          "id": "id_mojylnc9_gcpt9w",
+          "cod": "",
+          "texto": "preparar croquetas de pollo.",
+          "inicio": "2026-05-14",
+          "vence": "2026-05-15",
+          "fin": "2026-05-15",
+          "prioridad": "media",
+          "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+          "subtareas": []
+        }
+      ]
+    },
+    {
+      "id": "id_mol5m8um_hgywf7",
+      "cod": "0011",
+      "texto": "Rodillos despalilladora camiones engrasar",
+      "inicio": "2026-04-30",
+      "vence": "2026-05-08",
+      "fin": "",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": [
+        {
+          "id": "id_mp9off98_fq6yh7",
+          "cod": "",
+          "texto": "Llamar con comercial para pedir engranajes y rodamientos.",
+          "inicio": "2026-05-15",
+          "vence": "2026-05-18",
+          "fin": "",
+          "prioridad": "alta",
+          "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+          "subtareas": []
+        }
+      ]
+    },
+    {
+      "id": "id_mol60ktu_5mm77d",
+      "cod": "0012",
+      "texto": "plásticos rotos  furgón",
+      "inicio": "2026-04-30",
+      "vence": "2026-05-31",
+      "fin": "",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": []
+    },
+    {
+      "id": "id_molkn2lp_wzlcmk",
+      "cod": "0013",
+      "texto": "Pedir retenes 50831 de los reductores",
+      "inicio": "2026-04-30",
+      "vence": "2026-05-31",
+      "fin": "",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": []
+    },
+    {
+      "id": "id_moo4bq6i_gidksl",
+      "cod": "0014",
+      "texto": "Sistema apertura caja fuerte",
+      "inicio": "2026-05-02",
+      "vence": "2026-05-31",
+      "fin": "",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": []
+    },
+    {
+      "id": "id_moo4ce9e_dl4591",
+      "cod": "0015",
+      "texto": "Sistema Cama",
+      "inicio": "2026-05-02",
+      "vence": "2026-05-31",
+      "fin": "",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": []
+    },
+    {
+      "id": "id_mor8p21t_g0900i",
+      "cod": "0017",
+      "texto": "invento para sujetar goma cintas y desmontar rodillos tambores",
+      "inicio": "2026-05-04",
+      "vence": "2026-05-31",
+      "fin": "",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": []
+    },
+    {
+      "id": "id_mosw9rop_dkguz6",
+      "cod": "0018",
+      "texto": "Llamar a SEGURO COCHE para anular el seguro",
+      "inicio": "2026-05-05",
+      "vence": "2026-05-06",
+      "fin": "2026-05-07",
+      "prioridad": "alta",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": [
+        {
+          "id": "id_movkajtu_6fksdc",
+          "cod": "",
+          "texto": "Foto venta enviada.",
+          "inicio": "2026-05-07",
+          "vence": "2026-05-07",
+          "fin": "2026-05-07",
+          "prioridad": "media",
+          "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+          "subtareas": [
+            {
+              "id": "id_movkbll7_47912x",
+              "cod": "",
+              "texto": "Falta contestación y ver si me devuelven dinero",
+              "inicio": "2026-05-07",
+              "vence": "2026-05-07",
+              "fin": "2026-05-07",
+              "prioridad": "media",
+              "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+              "subtareas": [
+                {
+                  "id": "id_mowjw4bt_g78p3u",
+                  "cod": "",
+                  "texto": "No me devuelven nada",
+                  "inicio": "2026-05-07",
+                  "vence": "2026-05-07",
+                  "fin": "2026-05-07",
+                  "prioridad": "media",
+                  "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+                  "subtareas": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "id_mou4geot_owri2l",
+      "cod": "0019",
+      "texto": "soldadura en frío Batidora",
+      "inicio": "2026-04-24",
+      "vence": "2026-05-08",
+      "fin": "",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": [
+        {
+          "id": "id_mowjwx86_u63i2s",
+          "cod": "",
+          "texto": "Esperar Auditoria",
+          "inicio": "2026-05-07",
+          "vence": "2026-05-31",
+          "fin": "",
+          "prioridad": "media",
+          "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+          "subtareas": []
+        }
+      ]
+    },
+    {
+      "id": "id_mou5ol5f_64i50a",
+      "cod": "0020",
+      "texto": "Pedir Correas B51",
+      "inicio": "2026-05-06",
+      "vence": "2026-05-31",
+      "fin": "",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": [
+        {
+          "id": "id_mou5vgxu_f854tp",
+          "cod": "",
+          "texto": "Comprobar existencias",
+          "inicio": "",
+          "vence": "",
+          "fin": "",
+          "prioridad": "media",
+          "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+          "subtareas": []
+        }
+      ]
+    },
+    {
+      "id": "id_mou5pq3m_n63ea2",
+      "cod": "0021",
+      "texto": "Pedir Correas B62",
+      "inicio": "2026-05-06",
+      "vence": "2026-05-31",
+      "fin": "",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": [
+        {
+          "id": "id_mou5vs1u_tqicej",
+          "cod": "",
+          "texto": "No hay existencias",
+          "inicio": "2026-05-06",
+          "vence": "2026-05-31",
+          "fin": "2026-05-07",
+          "prioridad": "media",
+          "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+          "subtareas": []
+        }
+      ]
+    },
+    {
+      "id": "id_movl0jfc_39duss",
+      "cod": "0022",
+      "texto": "Pedir Correas A46 Cinta H4B",
+      "inicio": "2026-05-07",
+      "vence": "2026-05-31",
+      "fin": "",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": []
+    },
+    {
+      "id": "id_mowonkd4_4xy0kn",
+      "cod": "0023",
+      "texto": "Buscar escalera plegable",
+      "inicio": "2026-05-08",
+      "vence": "2026-05-15",
+      "fin": "",
+      "prioridad": "alta",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": []
+    },
+    {
+      "id": "id_mp0ufy39_tinrph",
+      "cod": "0025",
+      "texto": "filtros para bombas en pozos",
+      "inicio": "2026-05-11",
+      "vence": "2026-05-31",
+      "fin": "",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": []
+    },
+    {
+      "id": "id_mp5algs1_0pvggi",
+      "cod": "0027",
+      "texto": "Lamparas Lucía",
+      "inicio": "2026-05-04",
+      "vence": "2026-05-21",
+      "fin": "",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": []
+    },
+    {
+      "id": "id_mp5auzqx_ebmpf8",
+      "cod": "0028",
+      "texto": "Maya Porto palomos",
+      "inicio": "2026-05-14",
+      "vence": "2026-05-22",
+      "fin": "2026-05-15",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": [
+        {
+          "id": "id_mp5avu79_agyseh",
+          "cod": "",
+          "texto": "Taladro percutor",
+          "inicio": "2026-05-14",
+          "vence": "2026-05-15",
+          "fin": "2026-05-14",
+          "prioridad": "media",
+          "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+          "subtareas": []
+        },
+        {
+          "id": "id_mp5awenr_3n5xrp",
+          "cod": "",
+          "texto": "tacos 9mm 40 uds",
+          "inicio": "2026-05-14",
+          "vence": "2026-05-15",
+          "fin": "2026-05-14",
+          "prioridad": "media",
+          "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+          "subtareas": []
+        },
+        {
+          "id": "id_mp5awso0_qlfrob",
+          "cod": "",
+          "texto": "Cancamos 40 uds",
+          "inicio": "2026-05-14",
+          "vence": "2026-05-15",
+          "fin": "2026-05-14",
+          "prioridad": "media",
+          "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+          "subtareas": []
+        },
+        {
+          "id": "id_mp5ayuli_1ssjbv",
+          "cod": "",
+          "texto": "Cable rail",
+          "inicio": "2026-05-14",
+          "vence": "2026-05-15",
+          "fin": "2026-05-14",
+          "prioridad": "media",
+          "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+          "subtareas": []
+        },
+        {
+          "id": "id_mp5azd8e_edlblw",
+          "cod": "",
+          "texto": "Contrapeso barra",
+          "inicio": "2026-05-14",
+          "vence": "2026-05-15",
+          "fin": "2026-05-15",
+          "prioridad": "media",
+          "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+          "subtareas": []
+        },
+        {
+          "id": "id_mp5azodn_vif150",
+          "cod": "",
+          "texto": "cuerdas y poleas",
+          "inicio": "2026-05-14",
+          "vence": "2026-05-15",
+          "fin": "2026-05-15",
+          "prioridad": "media",
+          "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+          "subtareas": []
+        }
+      ]
+    },
+    {
+      "id": "id_mp7349yi_bmqqq7",
+      "cod": "0029",
+      "texto": "arreglar radial",
+      "inicio": "2026-05-15",
+      "vence": "2026-05-19",
+      "fin": "",
+      "prioridad": "media",
+      "ultimaModificacion": "1970-01-01T00:00:00.000Z",
+      "subtareas": []
+    }
+  ],
+  "historial": [
+    {
+      "fecha": "24/5/2026, 22:57:55",
+      "fechaISO": "2026-05-24T20:57:55.824Z",
+      "texto": "Editada tarea 0034: XApp para sincronizar con Lucia alarma → App para sincronizar con Lucia alarma"
+    },
+    {
+      "fecha": "24/5/2026, 22:57:45",
+      "fechaISO": "2026-05-24T20:57:45.553Z",
+      "texto": "Sincronización automática completada con http://localhost:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:57:35",
+      "fechaISO": "2026-05-24T20:57:35.561Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:57:30",
+      "fechaISO": "2026-05-24T20:57:30.615Z",
+      "texto": "Editada tarea 0034: App para sincronizar con Lucia alarma → XApp para sincronizar con Lucia alarma"
+    },
+    {
+      "fecha": "24/5/2026, 22:56:58",
+      "fechaISO": "2026-05-24T20:56:58.640Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:56:49",
+      "fechaISO": "2026-05-24T20:56:49.624Z",
+      "texto": "Sincronización automática completada con http://localhost:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:56:38",
+      "fechaISO": "2026-05-24T20:56:38.064Z",
+      "texto": "Sincronización JSON: 0 tareas añadidas; 0 registros actualizados por fecha; 0 conflictos sin resolver."
+    },
+    {
+      "fecha": "24/5/2026, 22:56:05",
+      "fechaISO": "2026-05-24T20:56:05.451Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:55:39",
+      "fechaISO": "2026-05-24T20:55:39.770Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:55:22",
+      "fechaISO": "2026-05-24T20:55:22.279Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:55:11",
+      "fechaISO": "2026-05-24T20:55:11.289Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:55:07",
+      "fechaISO": "2026-05-24T20:55:07.129Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:54:58",
+      "fechaISO": "2026-05-24T20:54:58.743Z",
+      "texto": "Editada tarea 0034: x App para sincronizar con Lucia alarma → App para sincronizar con Lucia alarma"
+    },
+    {
+      "fecha": "24/5/2026, 22:54:31",
+      "fechaISO": "2026-05-24T20:54:31.156Z",
+      "texto": "Sincronización automática completada con http://localhost:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:54:06",
+      "fechaISO": "2026-05-24T20:54:06.772Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:53:48",
+      "fechaISO": "2026-05-24T20:53:48.647Z",
+      "texto": "Sincronización automática completada con http://localhost:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:53:29",
+      "fechaISO": "2026-05-24T20:53:29.737Z",
+      "texto": "Editada tarea 0034: App para sincronizar con Lucia alarma → x App para sincronizar con Lucia alarma"
+    },
+    {
+      "fecha": "24/5/2026, 22:52:39",
+      "fechaISO": "2026-05-24T20:52:39.622Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 1 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:52:31",
+      "fechaISO": "2026-05-24T20:52:31.276Z",
+      "texto": "Eliminada tarea 0034: jelou"
+    },
+    {
+      "fecha": "24/5/2026, 22:49:01",
+      "fechaISO": "2026-05-24T20:49:01.762Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 6 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:45:25",
+      "fechaISO": "2026-05-24T20:45:25.054Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 6 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:44:43",
+      "fechaISO": "2026-05-24T20:44:43.591Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 6 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:44:08",
+      "fechaISO": "2026-05-24T20:44:08.252Z",
+      "texto": "Sincronización automática completada con http://localhost:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:43:44",
+      "fechaISO": "2026-05-24T20:43:44.713Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 6 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:42:44",
+      "fechaISO": "2026-05-24T20:42:44.053Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 6 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:42:21",
+      "fechaISO": "2026-05-24T20:42:21.660Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 6 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:41:57",
+      "fechaISO": "2026-05-24T20:41:57.464Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 6 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:41:33",
+      "fechaISO": "2026-05-24T20:41:33.607Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 6 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:41:02",
+      "fechaISO": "2026-05-24T20:41:02.874Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 6 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:40:46",
+      "fechaISO": "2026-05-24T20:40:46.960Z",
+      "texto": "Sincronización automática completada con http://localhost:8787: 0 tareas añadidas en esta app; 29 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:20:55",
+      "fechaISO": "2026-05-24T20:20:55.902Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:20:48",
+      "fechaISO": "2026-05-24T20:20:48.440Z",
+      "texto": "Sincronización automática completada con http://localhost:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 6 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:20:34",
+      "fechaISO": "2026-05-24T20:20:34.269Z",
+      "texto": "Sincronización automática completada con http://localhost:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 6 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:18:50",
+      "fechaISO": "2026-05-24T20:18:50.446Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:18:29",
+      "fechaISO": "2026-05-24T20:18:29.475Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:18:22",
+      "fechaISO": "2026-05-24T20:18:22.423Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:18:18",
+      "fechaISO": "2026-05-24T20:18:18.079Z",
+      "texto": "Sincronización JSON: 0 tareas y 0 subtareas añadidas; 0 conflictos detectados."
+    },
+    {
+      "fecha": "24/5/2026, 22:18:03",
+      "fechaISO": "2026-05-24T20:18:03.793Z",
+      "texto": "Sincronización automática completada con http://localhost:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 6 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:17:50",
+      "fechaISO": "2026-05-24T20:17:50.225Z",
+      "texto": "Sincronización JSON: 0 tareas y 0 subtareas añadidas; 0 conflictos detectados."
+    },
+    {
+      "fecha": "24/5/2026, 22:17:10",
+      "fechaISO": "2026-05-24T20:17:10.515Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:16:59",
+      "fechaISO": "2026-05-24T20:16:59.086Z",
+      "texto": "Sincronización automática completada con http://localhost:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 6 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:16:11",
+      "fechaISO": "2026-05-24T20:16:11.129Z",
+      "texto": "Sincronización automática completada con http://localhost:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 6 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:15:50",
+      "fechaISO": "2026-05-24T20:15:50.944Z",
+      "texto": "Sincronización automática completada con http://localhost:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 6 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:15:22",
+      "fechaISO": "2026-05-24T20:15:22.512Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:15:07",
+      "fechaISO": "2026-05-24T20:15:07.065Z",
+      "texto": "Actualizado prioridad en 0034: alta → media"
+    },
+    {
+      "fecha": "24/5/2026, 22:15:04",
+      "fechaISO": "2026-05-24T20:15:04.362Z",
+      "texto": "Actualizado prioridad en 0034: media → alta"
+    },
+    {
+      "fecha": "24/5/2026, 22:14:53",
+      "fechaISO": "2026-05-24T20:14:53.475Z",
+      "texto": "Actualizado vence en 0034: 2026-05-31 → 2026-06-07"
+    },
+    {
+      "fecha": "24/5/2026, 22:14:37",
+      "fechaISO": "2026-05-24T20:14:37.550Z",
+      "texto": "Editada tarea 0034: jelou → App para sincronizar con Lucia alarma"
+    },
+    {
+      "fecha": "24/5/2026, 22:12:31",
+      "fechaISO": "2026-05-24T20:12:31.789Z",
+      "texto": "Sincronización automática completada con http://localhost:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 4 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:12:23",
+      "fechaISO": "2026-05-24T20:12:23.212Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:12:04",
+      "fechaISO": "2026-05-24T20:12:04.623Z",
+      "texto": "Sincronización automática completada con http://localhost:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 4 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:11:51",
+      "fechaISO": "2026-05-24T20:11:51.192Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:11:41",
+      "fechaISO": "2026-05-24T20:11:41.206Z",
+      "texto": "Sincronización automática completada con http://localhost:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 4 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:11:24",
+      "fechaISO": "2026-05-24T20:11:24.360Z",
+      "texto": "Actualizado fin en 0034: 2026-05-17 → "
+    },
+    {
+      "fecha": "24/5/2026, 22:10:54",
+      "fechaISO": "2026-05-24T20:10:54.541Z",
+      "texto": "Actualizado fin en 0034:  → 2026-05-17"
+    },
+    {
+      "fecha": "24/5/2026, 22:10:46",
+      "fechaISO": "2026-05-24T20:10:46.702Z",
+      "texto": "Actualizado vence en 0034:  → 2026-05-31"
+    },
+    {
+      "fecha": "24/5/2026, 22:10:42",
+      "fechaISO": "2026-05-24T20:10:42.607Z",
+      "texto": "Actualizado inicio en 0034:  → 2026-05-24"
+    },
+    {
+      "fecha": "24/5/2026, 22:08:41",
+      "fechaISO": "2026-05-24T20:08:41.249Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 1 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:08:32",
+      "fechaISO": "2026-05-24T20:08:32.289Z",
+      "texto": "Sincronización automática completada con http://localhost:8787: 0 tareas añadidas en esta app; 1 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:08:13",
+      "fechaISO": "2026-05-24T20:08:13.757Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:07:59",
+      "fechaISO": "2026-05-24T20:07:59.348Z",
+      "texto": "Sincronización JSON: 0 tareas y 0 subtareas añadidas; 0 conflictos detectados."
+    },
+    {
+      "fecha": "24/5/2026, 22:07:19",
+      "fechaISO": "2026-05-24T20:07:19.037Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:07:15",
+      "fechaISO": "2026-05-24T20:07:15.106Z",
+      "texto": "Creada tarea 0034: jelou"
+    },
+    {
+      "fecha": "24/5/2026, 22:06:51",
+      "fechaISO": "2026-05-24T20:06:51.967Z",
+      "texto": "Sincronización automática completada con http://localhost:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 22:06:39",
+      "fechaISO": "2026-05-24T20:06:39.855Z",
+      "texto": "Sincronización automática completada con http://192.168.1.50:8787: 0 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 21:22:27",
+      "fechaISO": "2026-05-24T19:22:27.082Z",
+      "texto": "Sincronización automática completada con http://localhost:8787: 28 tareas añadidas en esta app; 0 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 21:22:14",
+      "fechaISO": "2026-05-24T19:22:14.849Z",
+      "texto": "Sincronización JSON: 0 tareas y 0 subtareas añadidas; 0 conflictos detectados."
+    },
+    {
+      "fecha": "24/5/2026, 21:21:51",
+      "fechaISO": "2026-05-24T19:21:51.443Z",
+      "texto": "Sincronización automática completada con http://192.168.1.133:8787: 0 tareas añadidas en esta app; 28 tareas añadidas al servidor; 0 conflictos."
+    },
+    {
+      "fecha": "24/5/2026, 21:05:49",
+      "fechaISO": "2026-05-24T19:05:49.116Z",
+      "texto": "Sincronización JSON: 0 tareas y 0 subtareas añadidas; 0 conflictos detectados."
+    },
+    {
+      "fecha": "24/5/2026, 21:05:35",
+      "fechaISO": "2026-05-24T19:05:35.852Z",
+      "texto": "Sincronización JSON: 0 tareas y 0 subtareas añadidas; 0 conflictos detectados."
+    },
+    {
+      "fecha": "24/5/2026, 21:04:16",
+      "fechaISO": "2026-05-24T19:04:16.823Z",
+      "texto": "Sincronización JSON: 0 tareas y 0 subtareas añadidas; 0 conflictos detectados."
+    },
+    {
+      "fecha": "17/5/2026, 21:17:08",
+      "texto": "Importación JSON realizada."
+    },
+    {
+      "fecha": "17/5/2026, 20:59:35",
+      "texto": "Actualizado prioridad en 0033: media → alta"
+    },
+    {
+      "fecha": "17/5/2026, 20:59:32",
+      "texto": "Actualizado vence en 0033:  → 2026-05-22"
+    },
+    {
+      "fecha": "17/5/2026, 20:59:26",
+      "texto": "Actualizado inicio en 0033:  → 2026-05-18"
+    },
+    {
+      "fecha": "17/5/2026, 20:59:22",
+      "texto": "Creada tarea 0033: App a play store"
+    },
+    {
+      "fecha": "17/5/2026, 20:58:12",
+      "texto": "Actualizado vence en 0032:  → 2026-05-29"
+    },
+    {
+      "fecha": "17/5/2026, 20:58:04",
+      "texto": "Actualizado inicio en 0032:  → 2026-05-18"
+    },
+    {
+      "fecha": "17/5/2026, 20:57:47",
+      "texto": "Creada tarea 0032: Macetero para Rosa"
+    },
+    {
+      "fecha": "17/5/2026, 13:48:01",
+      "texto": "Eliminada tarea 0016: comprar cinta carrocero ancha para 3D"
+    },
+    {
+      "fecha": "17/5/2026, 13:47:21",
+      "texto": "Eliminada tarea 0024: Poner maya gallinera donde metacrilato patio."
+    },
+    {
+      "fecha": "17/5/2026, 13:47:06",
+      "texto": "Eliminada tarea 0026: Lumbre Tomas"
+    },
+    {
+      "fecha": "17/5/2026, 13:46:07",
+      "texto": "Actualizado vence en 0031:  → 2026-05-22"
+    },
+    {
+      "fecha": "17/5/2026, 13:46:03",
+      "texto": "Actualizado inicio en 0031:  → 2026-05-18"
+    },
+    {
+      "fecha": "17/5/2026, 13:45:59",
+      "texto": "Creada tarea 0031: Quitar pila del patio"
+    },
+    {
+      "fecha": "17/5/2026, 13:45:39",
+      "texto": "Actualizado vence en 0030: 2026-05-12 → 2026-05-20"
+    },
+    {
+      "fecha": "17/5/2026, 13:45:20",
+      "texto": "Actualizado vence en subtarea de 0030:  → 2026-05-18"
+    },
+    {
+      "fecha": "17/5/2026, 13:45:14",
+      "texto": "Actualizado inicio en subtarea de 0030:  → 2026-05-18"
+    },
+    {
+      "fecha": "17/5/2026, 13:45:07",
+      "texto": "Añadida subtarea en 0030: Comprar cemento blanco"
+    },
+    {
+      "fecha": "17/5/2026, 13:44:55",
+      "texto": "Actualizado vence en 0030:  → 2026-05-12"
+    },
+    {
+      "fecha": "17/5/2026, 13:44:50",
+      "texto": "Actualizado inicio en 0030:  → 2026-05-18"
+    },
+    {
+      "fecha": "17/5/2026, 13:44:46",
+      "texto": "Creada tarea 0030: Enfoscar patio con cemento blanco"
+    },
+    {
+      "fecha": "17/5/2026, 13:43:40",
+      "texto": "Actualizado fin en 0023: 2026-05-14 → "
+    },
+    {
+      "fecha": "17/5/2026, 13:43:06",
+      "texto": "Actualizado fin en 0023:  → 2026-05-14"
+    },
+    {
+      "fecha": "17/5/2026, 13:43:03",
+      "texto": "Actualizado fin en 0026:  → 2026-05-14"
+    },
+    {
+      "fecha": "17/5/2026, 13:42:47",
+      "texto": "Actualizado fin en 0005:  → 2026-05-15"
+    },
+    {
+      "fecha": "17/5/2026, 13:42:41",
+      "texto": "Actualizado fin en subtarea de 0010:  → 2026-05-15"
+    },
+    {
+      "fecha": "17/5/2026, 13:34:21",
+      "texto": "Eliminada tarea 0030: sdgvadzfbxfvcb"
+    },
+    {
+      "fecha": "17/5/2026, 13:34:08",
+      "texto": "Creada tarea 0030: sdgvadzfbxfvcb"
+    },
+    {
+      "fecha": "17/5/2026, 13:14:32",
+      "texto": "Eliminada subtarea en 0028: Grapadora y grapas"
+    },
+    {
+      "fecha": "17/5/2026, 13:14:25",
+      "texto": "Actualizado fin en subtarea de 0028:  → 2026-05-15"
+    },
+    {
+      "fecha": "17/5/2026, 13:14:11",
+      "texto": "Actualizado fin en 0028:  → 2026-05-15"
+    },
+    {
+      "fecha": "17/5/2026, 13:13:30",
+      "texto": "Actualizado prioridad en subtarea de 0011: media → alta"
+    },
+    {
+      "fecha": "17/5/2026, 13:13:23",
+      "texto": "Actualizado vence en subtarea de 0011:  → 2026-05-18"
+    },
+    {
+      "fecha": "17/5/2026, 13:13:19",
+      "texto": "Actualizado inicio en subtarea de 0011:  → 2026-05-15"
+    },
+    {
+      "fecha": "17/5/2026, 13:13:14",
+      "texto": "Añadida subtarea en 0011: Llamar con comercial para pedir engranajes y rodamientos."
+    },
+    {
+      "fecha": "17/5/2026, 13:12:13",
+      "texto": "Actualizado fin en 0010:  → 2026-05-16"
+    },
+    {
+      "fecha": "15/5/2026, 17:41:22",
+      "texto": "Actualizado vence en 0029:  → 2026-05-19"
+    },
+    {
+      "fecha": "15/5/2026, 17:41:15",
+      "texto": "Actualizado inicio en 0029:  → 2026-05-15"
+    },
+    {
+      "fecha": "15/5/2026, 17:41:10",
+      "texto": "Creada tarea 0029: arreglar radial"
+    },
+    {
+      "fecha": "14/5/2026, 13:56:53",
+      "texto": "Actualizado fin en subtarea de 0028:  → 2026-05-14"
+    },
+    {
+      "fecha": "14/5/2026, 11:48:28",
+      "texto": "Actualizado vence en subtarea de 0028:  → 2026-05-15"
+    },
+    {
+      "fecha": "14/5/2026, 11:48:13",
+      "texto": "Actualizado vence en subtarea de 0028: 2026-05-22 → 2026-05-15"
+    },
+    {
+      "fecha": "14/5/2026, 11:48:02",
+      "texto": "Actualizado vence en subtarea de 0028:  → 2026-05-22"
+    },
+    {
+      "fecha": "14/5/2026, 11:47:48",
+      "texto": "Actualizado inicio en subtarea de 0028:  → 2026-05-14"
+    },
+    {
+      "fecha": "14/5/2026, 11:47:19",
+      "texto": "Editada subtarea en 0028: Cancamos → Cancamos 40 uds"
+    },
+    {
+      "fecha": "14/5/2026, 11:46:59",
+      "texto": "Editada subtarea en 0028: tacos 9mm → tacos 9mm 40 uds"
+    },
+    {
+      "fecha": "14/5/2026, 11:46:00",
+      "texto": "Añadida subtarea en 0028: cuerdas y poleas"
+    },
+    {
+      "fecha": "14/5/2026, 11:45:45",
+      "texto": "Añadida subtarea en 0028: Contrapeso barra"
+    },
+    {
+      "fecha": "14/5/2026, 11:45:21",
+      "texto": "Añadida subtarea en 0028: Cable rail"
+    },
+    {
+      "fecha": "14/5/2026, 11:44:35",
+      "texto": "Añadida subtarea en 0028: Grapadora y grapas"
+    },
+    {
+      "fecha": "14/5/2026, 11:44:22",
+      "texto": "Eliminada subtarea en 0028: grapadora y grapas"
+    },
+    {
+      "fecha": "14/5/2026, 11:44:07",
+      "texto": "Añadida subtarea dentro de subtarea en 0028: grapadora y grapas"
+    },
+    {
+      "fecha": "14/5/2026, 11:43:45",
+      "texto": "Añadida subtarea en 0028: Cancamos"
+    },
+    {
+      "fecha": "14/5/2026, 11:43:27",
+      "texto": "Añadida subtarea en 0028: tacos 9mm"
+    },
+    {
+      "fecha": "14/5/2026, 11:43:01",
+      "texto": "Añadida subtarea en 0028: Taladro percutor"
+    },
+    {
+      "fecha": "14/5/2026, 11:42:44",
+      "texto": "Actualizado vence en 0028:  → 2026-05-22"
+    },
+    {
+      "fecha": "14/5/2026, 11:42:28",
+      "texto": "Actualizado inicio en 0028:  → 2026-05-14"
+    },
+    {
+      "fecha": "14/5/2026, 11:42:21",
+      "texto": "Creada tarea 0028: Maya Porto palomos"
+    },
+    {
+      "fecha": "14/5/2026, 11:35:39",
+      "texto": "Actualizado vence en 0027:  → 2026-05-21"
+    },
+    {
+      "fecha": "14/5/2026, 11:35:33",
+      "texto": "Actualizado inicio en 0027:  → 2026-05-04"
+    },
+    {
+      "fecha": "14/5/2026, 11:35:24",
+      "texto": "Actualizado fin en 0024:  → 2026-05-14"
+    },
+    {
+      "fecha": "14/5/2026, 11:34:57",
+      "texto": "Creada tarea 0027: Lamparas Lucía"
+    },
+    {
+      "fecha": "12/5/2026, 10:14:04",
+      "texto": "Actualizado prioridad en 0026: media → alta"
+    },
+    {
+      "fecha": "12/5/2026, 10:13:57",
+      "texto": "Actualizado vence en 0026:  → 2026-05-12"
+    },
+    {
+      "fecha": "12/5/2026, 10:13:55",
+      "texto": "Actualizado inicio en 0026:  → 2026-05-12"
+    },
+    {
+      "fecha": "12/5/2026, 10:13:51",
+      "texto": "Creada tarea 0026: Lumbre Tomas"
+    },
+    {
+      "fecha": "11/5/2026, 8:51:51",
+      "texto": "Actualizado vence en 0025:  → 2026-05-31"
+    },
+    {
+      "fecha": "11/5/2026, 8:51:47",
+      "texto": "Actualizado inicio en 0025:  → 2026-05-11"
+    },
+    {
+      "fecha": "11/5/2026, 8:51:41",
+      "texto": "Creada tarea 0025: filtros para bombas en pozos"
+    },
+    {
+      "fecha": "8/5/2026, 12:10:26",
+      "texto": "Actualizado vence en 0024:  → 2026-05-15"
+    },
+    {
+      "fecha": "8/5/2026, 12:10:10",
+      "texto": "Actualizado inicio en 0024:  → 2026-05-04"
+    },
+    {
+      "fecha": "8/5/2026, 12:10:02",
+      "texto": "Creada tarea 0024: Poner maya gallinera donde metacrilato patio."
+    },
+    {
+      "fecha": "8/5/2026, 10:58:58",
+      "texto": "Actualizado prioridad en 0023: media → alta"
+    },
+    {
+      "fecha": "8/5/2026, 10:58:51",
+      "texto": "Actualizado vence en 0023:  → 2026-05-15"
+    },
+    {
+      "fecha": "8/5/2026, 10:58:42",
+      "texto": "Actualizado inicio en 0023:  → 2026-05-08"
+    },
+    {
+      "fecha": "8/5/2026, 10:58:34",
+      "texto": "Creada tarea 0023: Buscar escalera plegable"
+    },
+    {
+      "fecha": "8/5/2026, 8:46:07",
+      "texto": "Actualizado vence en subtarea de 0019:  → 2026-05-31"
+    },
+    {
+      "fecha": "8/5/2026, 8:46:02",
+      "texto": "Actualizado inicio en subtarea de 0019:  → 2026-05-07"
+    },
+    {
+      "fecha": "8/5/2026, 8:45:52",
+      "texto": "Añadida subtarea en 0019: Esperar Auditoria"
+    },
+    {
+      "fecha": "8/5/2026, 8:45:33",
+      "texto": "Actualizado fin en subtarea de 0018:  → 2026-05-07"
+    },
+    {
+      "fecha": "8/5/2026, 8:45:25",
+      "texto": "Actualizado vence en subtarea de 0018:  → 2026-05-07"
+    },
+    {
+      "fecha": "8/5/2026, 8:45:23",
+      "texto": "Actualizado inicio en subtarea de 0018:  → 2026-05-07"
+    },
+    {
+      "fecha": "8/5/2026, 8:45:15",
+      "texto": "Añadida subtarea dentro de subtarea en 0018: No me devuelven nada"
+    },
+    {
+      "fecha": "8/5/2026, 8:44:54",
+      "texto": "Actualizado fin en 0018:  → 2026-05-07"
+    },
+    {
+      "fecha": "8/5/2026, 8:44:46",
+      "texto": "Actualizado fin en 0016:  → 2026-05-07"
+    },
+    {
+      "fecha": "8/5/2026, 8:44:35",
+      "texto": "Actualizado fin en 0006:  → 2026-05-07"
+    },
+    {
+      "fecha": "7/5/2026, 16:31:12",
+      "texto": "Actualizado fin en subtarea de 0021:  → 2026-05-07"
+    },
+    {
+      "fecha": "7/5/2026, 16:31:08",
+      "texto": "Actualizado vence en subtarea de 0021:  → 2026-05-31"
+    },
+    {
+      "fecha": "7/5/2026, 16:31:05",
+      "texto": "Actualizado inicio en subtarea de 0021: 2026-05-04 → 2026-05-06"
+    },
+    {
+      "fecha": "7/5/2026, 16:30:58",
+      "texto": "Actualizado inicio en subtarea de 0021:  → 2026-05-04"
+    },
+    {
+      "fecha": "7/5/2026, 16:30:46",
+      "texto": "Editada subtarea en 0021: Comprobar existencias → No hay existencias"
+    },
+    {
+      "fecha": "7/5/2026, 16:29:16",
+      "texto": "Actualizado vence en 0022:  → 2026-05-31"
+    },
+    {
+      "fecha": "7/5/2026, 16:29:01",
+      "texto": "Actualizado inicio en 0022:  → 2026-05-07"
+    },
+    {
+      "fecha": "7/5/2026, 16:28:54",
+      "texto": "Creada tarea 0022: Pedir Correas A46 Cinta H4B"
+    },
+    {
+      "fecha": "7/5/2026, 16:10:10",
+      "texto": "Actualizado fin en subtarea de 0018: 2026-05-07 → "
+    },
+    {
+      "fecha": "7/5/2026, 16:09:31",
+      "texto": "Añadida subtarea dentro de subtarea en 0018: Falta contestación y ver si me devuelven dinero"
+    },
+    {
+      "fecha": "7/5/2026, 16:08:42",
+      "texto": "Añadida subtarea en 0018: Foto venta enviada."
+    },
+    {
+      "fecha": "6/5/2026, 16:37:32",
+      "texto": "Añadida subtarea en 0021: Comprobar existencias"
+    },
+    {
+      "fecha": "6/5/2026, 16:37:17",
+      "texto": "Añadida subtarea en 0020: Comprobar existencias"
+    },
+    {
+      "fecha": "6/5/2026, 16:32:58",
+      "texto": "Actualizado vence en 0021:  → 2026-05-31"
+    },
+    {
+      "fecha": "6/5/2026, 16:32:55",
+      "texto": "Actualizado inicio en 0021:  → 2026-05-06"
+    },
+    {
+      "fecha": "6/5/2026, 16:32:49",
+      "texto": "Creada tarea 0021: Pedir Correas B62"
+    },
+    {
+      "fecha": "6/5/2026, 16:32:14",
+      "texto": "Actualizado vence en 0020:  → 2026-05-31"
+    },
+    {
+      "fecha": "6/5/2026, 16:32:02",
+      "texto": "Actualizado inicio en 0020:  → 2026-05-06"
+    },
+    {
+      "fecha": "6/5/2026, 16:31:56",
+      "texto": "Creada tarea 0020: Pedir Correas B51"
+    },
+    {
+      "fecha": "6/5/2026, 16:31:17",
+      "texto": "Eliminada tarea 0009: Pedir condensador compresor naranja."
+    },
+    {
+      "fecha": "6/5/2026, 16:31:10",
+      "texto": "Eliminada subtarea en 0009: pedido a Jose"
+    },
+    {
+      "fecha": "6/5/2026, 15:58:31",
+      "texto": "Actualizado fin en 0003:  → 2026-05-05"
+    },
+    {
+      "fecha": "6/5/2026, 15:57:52",
+      "texto": "Actualizado vence en 0019:  → 2026-05-08"
+    },
+    {
+      "fecha": "6/5/2026, 15:57:46",
+      "texto": "Actualizado inicio en 0019:  → 2026-04-24"
+    },
+    {
+      "fecha": "6/5/2026, 15:57:35",
+      "texto": "Creada tarea 0019: soldadura en frío Batidora"
+    },
+    {
+      "fecha": "6/5/2026, 12:48:02",
+      "texto": "Editada tarea 0018: Llamar a Virginia para anular el seguro → Llamar a SEGURO COCHE para anular el seguro"
+    },
+    {
+      "fecha": "5/5/2026, 19:20:55",
+      "texto": "Actualizado prioridad en 0018: media → alta"
+    },
+    {
+      "fecha": "5/5/2026, 19:20:50",
+      "texto": "Actualizado vence en 0018:  → 2026-05-06"
+    },
+    {
+      "fecha": "5/5/2026, 19:20:46",
+      "texto": "Actualizado inicio en 0018:  → 2026-05-05"
+    },
+    {
+      "fecha": "5/5/2026, 19:20:42",
+      "texto": "Creada tarea 0018: Llamar a Virginia para anular el seguro"
+    },
+    {
+      "fecha": "4/5/2026, 15:33:24",
+      "texto": "Actualizado vence en 0017:  → 2026-05-31"
+    },
+    {
+      "fecha": "4/5/2026, 15:33:09",
+      "texto": "Actualizado inicio en 0017:  → 2026-05-04"
+    },
+    {
+      "fecha": "4/5/2026, 15:32:58",
+      "texto": "Creada tarea 0017: invento para sujetar goma cintas y desmontar rodillos tambores"
+    },
+    {
+      "fecha": "4/5/2026, 12:36:08",
+      "texto": "Actualizado fin en 0004:  → 2026-05-04"
+    },
+    {
+      "fecha": "4/5/2026, 12:35:58",
+      "texto": "Actualizado inicio en subtarea de 0004:  → 2026-04-30"
+    },
+    {
+      "fecha": "4/5/2026, 12:35:52",
+      "texto": "Actualizado vence en subtarea de 0004:  → 2026-05-01"
+    },
+    {
+      "fecha": "4/5/2026, 12:35:35",
+      "texto": "Actualizado fin en subtarea de 0004: 2026-04-30 → 2026-05-04"
+    },
+    {
+      "fecha": "4/5/2026, 12:35:20",
+      "texto": "Actualizado fin en subtarea de 0004: 2026-04-29 → 2026-05-04"
+    },
+    {
+      "fecha": "4/5/2026, 12:34:58",
+      "texto": "Actualizado fin en subtarea de 0004:  → 2026-04-30"
+    },
+    {
+      "fecha": "3/5/2026, 12:42:31",
+      "texto": "Actualizado vence en subtarea de 0010:  → 2026-05-15"
+    },
+    {
+      "fecha": "3/5/2026, 12:42:27",
+      "texto": "Actualizado inicio en subtarea de 0010:  → 2026-05-14"
+    },
+    {
+      "fecha": "3/5/2026, 12:41:01",
+      "texto": "Actualizado vence en 0016:  → 2026-05-04"
+    },
+    {
+      "fecha": "3/5/2026, 12:40:56",
+      "texto": "Actualizado inicio en 0016:  → 2026-05-03"
+    },
+    {
+      "fecha": "3/5/2026, 12:40:46",
+      "texto": "Creada tarea 0016: comprar cinta carrocero ancha para 3D"
+    },
+    {
+      "fecha": "2/5/2026, 11:09:13",
+      "texto": "Editada tarea 0013: Pedir retenes 50831 de los reduntores → Pedir retenes 50831 de los reductores"
+    },
+    {
+      "fecha": "2/5/2026, 11:08:01",
+      "texto": "Actualizado vence en 0015:  → 2026-05-31"
+    },
+    {
+      "fecha": "2/5/2026, 11:07:57",
+      "texto": "Actualizado inicio en 0015:  → 2026-05-02"
+    },
+    {
+      "fecha": "2/5/2026, 11:07:51",
+      "texto": "Creada tarea 0015: Sistema Cama"
+    },
+    {
+      "fecha": "2/5/2026, 11:07:32",
+      "texto": "Actualizado vence en 0014:  → 2026-05-31"
+    },
+    {
+      "fecha": "2/5/2026, 11:07:24",
+      "texto": "Actualizado inicio en 0014:  → 2026-05-02"
+    },
+    {
+      "fecha": "2/5/2026, 11:07:20",
+      "texto": "Creada tarea 0014: Sistema apertura caja fuerte"
+    },
+    {
+      "fecha": "2/5/2026, 8:34:00",
+      "texto": "Eliminada tarea 0008: Herbicida balsa."
+    },
+    {
+      "fecha": "2/5/2026, 8:33:41",
+      "texto": "Actualizado fin en subtarea de 0007:  → 2026-04-30"
+    },
+    {
+      "fecha": "2/5/2026, 8:33:27",
+      "texto": "Actualizado fin en 0007:  → 2026-04-30"
+    },
+    {
+      "fecha": "2/5/2026, 8:33:04",
+      "texto": "Actualizado fin en 0001:  → 2026-05-01"
+    },
+    {
+      "fecha": "30/4/2026, 16:21:04",
+      "texto": "Actualizado vence en 0013:  → 2026-05-31"
+    },
+    {
+      "fecha": "30/4/2026, 16:20:49",
+      "texto": "Actualizado inicio en 0013:  → 2026-04-30"
+    },
+    {
+      "fecha": "30/4/2026, 16:20:44",
+      "texto": "Creada tarea 0013: Pedir retenes 50831 de los reduntores"
+    },
+    {
+      "fecha": "30/4/2026, 9:31:34",
+      "texto": "Actualizado vence en 0012:  → 2026-05-31"
+    },
+    {
+      "fecha": "30/4/2026, 9:31:26",
+      "texto": "Actualizado inicio en 0012:  → 2026-04-30"
+    },
+    {
+      "fecha": "30/4/2026, 9:31:20",
+      "texto": "Creada tarea 0012: plásticos rotos  furgón"
+    },
+    {
+      "fecha": "30/4/2026, 9:20:32",
+      "texto": "Actualizado vence en 0011:  → 2026-05-08"
+    },
+    {
+      "fecha": "30/4/2026, 9:20:23",
+      "texto": "Actualizado inicio en 0011:  → 2026-04-30"
+    },
+    {
+      "fecha": "30/4/2026, 9:20:11",
+      "texto": "Creada tarea 0011: Rodillos despalilladora camiones engrasar"
+    },
+    {
+      "fecha": "29/4/2026, 13:54:17",
+      "texto": "Actualizado fin en subtarea de 0004:  → 2026-04-29"
+    },
+    {
+      "fecha": "29/4/2026, 13:53:48",
+      "texto": "Añadida subtarea dentro de subtarea en 0004: desmontar rodillo hoja para llevárselo o no"
+    },
+    {
+      "fecha": "29/4/2026, 13:53:08",
+      "texto": "Actualizado inicio en subtarea de 0004:  → 2026-04-29"
+    },
+    {
+      "fecha": "29/4/2026, 13:53:02",
+      "texto": "Añadida subtarea en 0004: Los 2 rodillos están listos."
+    },
+    {
+      "fecha": "29/4/2026, 13:16:00",
+      "texto": "Añadida subtarea en 0010: preparar croquetas de pollo."
+    },
+    {
+      "fecha": "29/4/2026, 13:15:36",
+      "texto": "Actualizado vence en 0010:  → 2026-05-15"
+    },
+    {
+      "fecha": "29/4/2026, 13:15:24",
+      "texto": "Actualizado inicio en 0010:  → 2026-04-29"
+    },
+    {
+      "fecha": "29/4/2026, 13:15:15",
+      "texto": "Creada tarea 0010: Comida granjeros 16-5-26"
+    },
+    {
+      "fecha": "29/4/2026, 12:31:54",
+      "texto": "Actualizado inicio en subtarea de 0009:  → 2026-04-29"
+    },
+    {
+      "fecha": "29/4/2026, 12:31:49",
+      "texto": "Añadida subtarea en 0009: pedido a Jose"
+    },
+    {
+      "fecha": "29/4/2026, 10:25:02",
+      "texto": "Actualizado vence en 0009:  → 2026-05-08"
+    },
+    {
+      "fecha": "29/4/2026, 10:24:42",
+      "texto": "Actualizado inicio en 0009:  → 2026-04-29"
+    },
+    {
+      "fecha": "29/4/2026, 10:24:35",
+      "texto": "Creada tarea 0009: Pedir condensador compresor naranja."
+    },
+    {
+      "fecha": "29/4/2026, 9:58:40",
+      "texto": "Actualizado vence en subtarea de 0007:  → 2026-05-04"
+    },
+    {
+      "fecha": "29/4/2026, 9:58:33",
+      "texto": "Actualizado inicio en subtarea de 0007:  → 2026-04-29"
+    },
+    {
+      "fecha": "29/4/2026, 9:58:23",
+      "texto": "Eliminada subtarea en 0007: p"
+    },
+    {
+      "fecha": "29/4/2026, 9:58:19",
+      "texto": "Añadida subtarea en 0007: p"
+    },
+    {
+      "fecha": "29/4/2026, 9:57:31",
+      "texto": "Añadida subtarea en 0007: Jacinto pide varilla"
+    },
+    {
+      "fecha": "29/4/2026, 9:15:13",
+      "texto": "Actualizado vence en 0008:  → 2026-05-08"
+    },
+    {
+      "fecha": "29/4/2026, 9:14:59",
+      "texto": "Actualizado inicio en 0008: 2026-04-29 → 2026-04-28"
+    },
+    {
+      "fecha": "29/4/2026, 9:14:55",
+      "texto": "Actualizado inicio en 0008:  → 2026-04-29"
+    },
+    {
+      "fecha": "29/4/2026, 9:14:49",
+      "texto": "Actualizado prioridad en 0008: media → alta"
+    },
+    {
+      "fecha": "29/4/2026, 9:14:45",
+      "texto": "Creada tarea 0008: Herbicida balsa."
+    },
+    {
+      "fecha": "28/4/2026, 21:02:31",
+      "texto": "Eliminada tarea 0008: fjjfifj"
+    },
+    {
+      "fecha": "28/4/2026, 21:02:25",
+      "texto": "Creada tarea 0008: fjjfifj"
+    },
+    {
+      "fecha": "28/4/2026, 21:01:41",
+      "texto": "Editada tarea 0004: Llamar a Raimundo tornero Valverde para ir a recoger rodillos. → Llamar a Raimundo tornero Valverde para ir a recoger rodillos."
+    },
+    {
+      "fecha": "6/5/2026, 15:57:52",
+      "texto": "Actualizado vence en 0019:  ��� 2026-05-08"
+    },
+    {
+      "fecha": "29/4/2026, 13:15:24",
+      "texto": "Actualizado inicio en 0010:  ��� 2026-04-29"
+    },
+    {
+      "fecha": "8/5/2026, 8:45:25",
+      "texto": "Actualizado vence en subtarea de 0018:  ��� 2026-05-07"
+    }
+  ],
+  "ultimoCambio": {
+    "fechaISO": "2026-05-24T20:57:55.824Z",
+    "fecha": "24/5/2026, 22:57:55",
+    "texto": "Editada tarea 0034: XApp para sincronizar con Lucia alarma → App para sincronizar con Lucia alarma"
+  },
+  "filtros": {},
+  "ajustes": {}
+}

@@ -1,0 +1,18 @@
+VERSIÓN V22 - CORRECCIÓN SINCRONIZACIÓN REAL
+
+Corrección incluida:
+- Añadida la función crearPaqueteDatos(), que faltaba en la versión anterior.
+- El botón "Sincronización automática" ya puede preparar los registros locales y enviarlos al servidor del ordenador.
+- Se mantiene la lógica segura: añade registros que falten y avisa de conflictos sin sobrescribir diferencias automáticamente.
+
+Uso recomendado:
+1. En el ordenador, ejecuta ARRANCAR_SERVIDOR.bat.
+2. Abre la app del ordenador desde http://localhost:8787/index.html.
+3. En el móvil, abre la app y escribe la IP del ordenador, por ejemplo http://192.168.1.133:8787.
+4. Pulsa Probar conexión.
+5. Pulsa Sincronización automática.
+
+IMPORTANTE:
+- El ordenador y el móvil deben estar en la misma red WiFi.
+- Deja abierta la ventana negra del servidor mientras sincronizas.
+- Si Windows pregunta por permisos de red para Node.js, permite acceso en red privada.

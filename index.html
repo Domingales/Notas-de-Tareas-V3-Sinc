@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Notas de Tareas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root{--accent:#007bff;--accent-dark:#0056b3;--bg:#f4f6f8;--panel:#fff;--text:#111;--border:#b8c0cc;--radius:6px;--font-scale:1;--shadow:0 3px 10px rgba(0,0,0,.18)}
+*{box-sizing:border-box}
+body{margin:8px;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);font-size:calc(14px * var(--font-scale));overflow:hidden}
+.app{height:calc(100vh - 16px);display:flex;flex-direction:column;min-height:0}
+.topbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px;padding:6px;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);position:relative;z-index:1000;flex:0 0 auto}
+.topbar-buttons{margin-left:auto;display:flex;gap:6px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.nowrap{white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
+input,select,button,textarea{font:inherit}
+input,select,textarea{border:1px solid var(--border);border-radius:var(--radius);background:#fff;color:#111;padding:4px 5px}
+button{border:1px solid var(--accent-dark);border-radius:var(--radius);background:var(--accent);color:white;padding:5px 8px;cursor:pointer;white-space:nowrap}
+button:hover{filter:brightness(.95)}
+.info-btn{width:30px;height:30px;border-radius:50%;padding:0;font-weight:bold;font-family:Georgia,serif;font-size:18px;line-height:1;display:inline-flex;align-items:center;justify-content:center}
+.info-list{max-height:55dvh;overflow:auto;border:1px solid var(--border);border-radius:var(--radius);background:#fff;padding:10px}
+.info-item{border-bottom:1px solid #ddd;padding:6px 0}.info-item:last-child{border-bottom:none}
+.info-date{font-weight:bold;color:var(--accent-dark);font-size:1.15em}.info-label{font-weight:bold;margin-bottom:4px}.sync-report{margin-top:8px;max-height:35dvh;overflow:auto;border:1px solid var(--border);border-radius:var(--radius);background:#fff;padding:8px;white-space:pre-wrap}.sync-ok{color:#15803d;font-weight:bold}.sync-warn{color:#b45309;font-weight:bold}.sync-error{color:#c1121f;font-weight:bold}
+body.mode-3d input,body.mode-3d select,body.mode-3d textarea,body.mode-3d .panel,body.mode-3d .topbar{box-shadow:var(--shadow)}
+body.mode-3d button{
+  border-radius:14px;
+  border:1px solid rgba(0,0,0,.55);
+  background:
+    linear-gradient(to bottom, rgba(255,255,255,.95) 0%, rgba(255,255,255,.55) 10%, rgba(255,255,255,.18) 32%, transparent 33%),
+    linear-gradient(to bottom, color-mix(in srgb, var(--accent) 88%, white 12%) 0%, var(--accent) 48%, color-mix(in srgb, var(--accent-dark) 82%, black 18%) 100%);
+  color:white;
+  text-shadow:0 -1px 1px rgba(0,0,0,.55);
+  box-shadow:
+    inset 0 2px 3px rgba(255,255,255,.75),
+    inset 0 -4px 7px rgba(0,0,0,.28),
+    0 3px 5px rgba(0,0,0,.38);
+}
+body.mode-3d button:hover{filter:brightness(1.04)}
+body.mode-3d button:active{
+  transform:translateY(1px);
+  box-shadow:
+    inset 0 2px 5px rgba(0,0,0,.32),
+    inset 0 -2px 4px rgba(255,255,255,.22),
+    0 1px 2px rgba(0,0,0,.35);
+}
+body.mode-2d button,body.mode-2d input,body.mode-2d select,body.mode-2d textarea,body.mode-2d .panel,body.mode-2d .topbar{box-shadow:none}
+.table-wrap{width:100%;flex:1 1 auto;min-height:0;overflow:auto;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius)}
+table{width:100%;border-collapse:collapse;table-layout:fixed;background:white}
+th,td{border:1px solid var(--border);padding:3px 4px;vertical-align:middle;overflow:hidden;text-overflow:ellipsis}
+th{background:var(--accent);color:#fff;font-weight:bold;text-align:center;overflow:visible;position:sticky;top:0;z-index:900}
+.col-fecha{width:15ch;min-width:15ch;max-width:15ch}
+.col-cod{width:7ch;min-width:7ch;max-width:7ch;text-align:center;white-space:nowrap}
+.col-prio{width:10ch;min-width:10ch;max-width:10ch}
+.col-estado{width:13ch;min-width:13ch;max-width:13ch;text-align:center;white-space:nowrap}
+.col-acciones{width:12ch;min-width:12ch;max-width:12ch;text-align:center;white-space:nowrap}
+.col-tarea{width:30ch;min-width:30ch;white-space:normal;overflow:visible;text-overflow:clip;word-break:break-word;overflow-wrap:anywhere}
+.date-input{width:100%;min-width:0;padding:2px;font-size:.9em}
+.prio-select{width:100%;min-width:0;padding:2px;font-size:.9em}
+.actions{display:flex;gap:2px;justify-content:center;align-items:center}
+.actions button{padding:1px 3px;min-width:20px;line-height:1.2}
+.add-header{background:white;color:var(--accent);border:1px solid white;margin-left:4px;padding:0 4px;font-weight:bold}
+.filter-btn{cursor:pointer;margin-left:3px;font-weight:bold;background:#fff;border-radius:3px;padding:0 2px;display:inline-block}
+.azul{color:#005bff}.rojo{color:#d00000}.filter-active{outline:2px solid #fff;background:#ffe58a}
+tr.vencida td{background:#ffd1d1}tr.finalizada td{background:#d8ffd8}tr.iniciada td{background:#fff3c8}
+tr.prio-baja td:first-child{border-left:6px solid #777}tr.prio-media td:first-child{border-left:6px solid #007bff}tr.prio-alta td:first-child{border-left:6px solid #ff9800}tr.prio-critica td:first-child{border-left:6px solid #e00000}
+.sub-row td{background:#fbfbfb!important}.subtask{padding-left:22px;font-size:.94em;white-space:normal}
+.panel{display:none;position:fixed;top:10px;right:10px;left:auto;width:min(430px,calc(100vw - 20px));max-height:calc(100dvh - 20px);overflow:auto;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);z-index:2147483000;padding:10px;padding-bottom:18px}
+.panel h3{margin:0 0 8px;color:var(--accent-dark)}.panel-row{margin:8px 0;display:flex;gap:6px;align-items:center;flex-wrap:wrap}.panel textarea{width:100%;height:min(55dvh,420px);min-height:180px}.close-panel{float:right;background:#666;border-color:#555}
+.multi-filter{position:relative;display:inline-block}
+.multi-filter-btn{background:white;color:var(--accent);border:1px solid white;margin-left:4px;padding:0 4px;font-weight:bold}
+.multi-filter-panel{display:none;position:fixed;right:10px;top:90px;background:white;color:#111;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:6px;z-index:2147483647;min-width:150px;text-align:left;max-height:80vh;overflow:auto}
+.multi-filter-panel label{display:block;white-space:nowrap;margin:3px 0;font-weight:normal}
+.multi-filter-panel .mini-actions{display:flex;gap:4px;margin-top:5px}
+.multi-filter-panel .mini-actions button{padding:2px 5px;font-size:.85em}
+
+body.theme-blue{--accent:#007bff;--accent-dark:#0056b3}body.theme-green{--accent:#15803d;--accent-dark:#0f5c2c}body.theme-red{--accent:#c1121f;--accent-dark:#8d0d16}body.theme-yellow{--accent:#d99a00;--accent-dark:#9a6e00}body.theme-black{--accent:#222;--accent-dark:#000}
+body.size-compact{--font-scale:.88}body.size-normal{--font-scale:1}body.size-large{--font-scale:1.15}
+@media print{
+  body{background:white;margin:0;font-size:11px;overflow:visible}
+  .app{height:auto;display:block}
+  .topbar,.panel,.no-print,.filter-btn,.multi-filter,.add-header,.col-acciones,td.col-acciones,th.col-acciones{display:none!important}
+  .table-wrap{border:none!important;overflow:visible!important;height:auto!important;max-height:none!important}
+  table{width:100%;table-layout:fixed;border-collapse:collapse;background:white}
+  thead{display:table-header-group}
+  tbody{display:table-row-group}
+  tr{break-inside:avoid;page-break-inside:avoid}
+  th{position:static!important;top:auto!important;z-index:auto!important;background:#e9e9e9!important;color:#000!important;font-weight:bold;text-align:center;overflow:hidden}
+  th,td{padding:2px 3px;border:1px solid #555;vertical-align:middle}
+  .col-fecha{width:15ch;min-width:15ch;max-width:15ch}
+  .col-cod{width:7ch;min-width:7ch;max-width:7ch;text-align:center;white-space:nowrap}
+  .col-prio{width:10ch;min-width:10ch;max-width:10ch}
+  .col-estado{width:13ch;min-width:13ch;max-width:13ch;text-align:center;white-space:nowrap}
+  .col-tarea{width:auto;min-width:30ch;white-space:normal;overflow:visible;text-overflow:clip;word-break:break-word;overflow-wrap:anywhere}
+  input,select{border:none!important;background:transparent!important;padding:0!important;font-size:inherit!important;appearance:none!important;-webkit-appearance:none!important;box-shadow:none!important;color:#000!important}
+  button{display:none!important}
+}
+</style>
+</head>
+<body class="mode-2d theme-blue size-normal">
+<div class="app">
+<div class="topbar no-print">
+<span class="nowrap">Faltan menos de <input id="diasFiltro" type="number" min="0" style="width:58px" oninput="onFilterChange()"></span>
+<input id="textoFiltro" placeholder="Buscar texto..." style="min-width:180px;flex:1" oninput="onFilterChange()">
+<span class="topbar-buttons"><button onclick="nuevaTarea()">Nueva tarea</button><button onclick="limpiarFiltros()">Limpiar filtros</button><button onclick="window.print()">Imprimir</button><button onclick="exportarExcel()">Excel</button><button onclick="abrirPanel('panelJson')">JSON</button><button onclick="abrirPanel('panelJson')">Sincronizar</button><button onclick="abrirPanel('panelSyncAuto')">Sync automática</button><button onclick="abrirPanel('panelAjustes')">Ajustes</button><button onclick="abrirPanel('panelHistorial');renderHistorial()">Historial</button><button class="info-btn" title="Último cambio" onclick="abrirInfoCambios()">i</button></span>
+</div>
+<div class="table-wrap"><table><thead><tr>
+<th class="col-fecha">INICIO <span id="fInicioSi" class="filter-btn azul" onclick="setFiltroEstado('inicio','si')">✔</span><span id="fInicioNo" class="filter-btn rojo" onclick="setFiltroEstado('inicio','no')">✖</span></th>
+<th class="col-fecha">VENCE <span id="fVenceOk" class="filter-btn azul" onclick="setFiltroEstado('vence','ok')">✔</span><span id="fVenceMal" class="filter-btn rojo" onclick="setFiltroEstado('vence','mal')">✖</span></th>
+<th class="col-fecha">FIN <span id="fFinSi" class="filter-btn azul" onclick="setFiltroEstado('fin','si')">✔</span><span id="fFinNo" class="filter-btn rojo" onclick="setFiltroEstado('fin','no')">✖</span></th>
+<th class="col-cod">COD</th><th class="col-tarea">TAREA <button class="add-header no-print" onclick="nuevaTarea()" title="Nueva tarea">+</button></th><th class="col-prio">PRIO <span class="multi-filter"><button class="multi-filter-btn no-print" onclick="toggleMultiFiltro(event,'prioFilterPanel')">▾</button><div id="prioFilterPanel" class="multi-filter-panel no-print"><label><input type="checkbox" value="baja" onchange="onMultiFiltroChange('prioridades')"> baja</label><label><input type="checkbox" value="media" onchange="onMultiFiltroChange('prioridades')"> media</label><label><input type="checkbox" value="alta" onchange="onMultiFiltroChange('prioridades')"> alta</label><label><input type="checkbox" value="critica" onchange="onMultiFiltroChange('prioridades')"> crítica</label><div class="mini-actions"><button onclick="marcarTodasMulti('prioridades')">Todas</button><button onclick="limpiarMulti('prioridades')">Ninguna</button></div></div></span></th><th class="col-estado">ESTADO <span class="multi-filter"><button class="multi-filter-btn no-print" onclick="toggleMultiFiltro(event,'estadoFilterPanel')">▾</button><div id="estadoFilterPanel" class="multi-filter-panel no-print"><label><input type="checkbox" value="PENDIENTE" onchange="onMultiFiltroChange('estados')"> PENDIENTE</label><label><input type="checkbox" value="INICIADA" onchange="onMultiFiltroChange('estados')"> INICIADA</label><label><input type="checkbox" value="VENCIDA" onchange="onMultiFiltroChange('estados')"> VENCIDA</label><label><input type="checkbox" value="FINALIZADA" onchange="onMultiFiltroChange('estados')"> FINALIZADA</label><div class="mini-actions"><button onclick="marcarTodasMulti('estados')">Todas</button><button onclick="limpiarMulti('estados')">Ninguna</button></div></div></span></th><th class="col-acciones no-print">ACCIONES</th>
+</tr></thead><tbody id="tablaTareas"></tbody></table></div>
+</div>
+<div id="panelAjustes" class="panel no-print"><button class="close-panel" onclick="cerrarPanel('panelAjustes')">Cerrar</button><h3>Ajustes</h3>
+<div class="panel-row"><label>Modo visual:</label><select id="ajusteModo" onchange="guardarAjustesDesdePanel()"><option value="2d">2D</option><option value="3d">3D</option></select></div>
+<div class="panel-row"><label>Tema:</label><select id="ajusteTema" onchange="guardarAjustesDesdePanel()"><option value="blue">Azul</option><option value="green">Verde</option><option value="red">Rojo</option><option value="yellow">Amarillo</option><option value="black">Negro</option></select></div>
+<div class="panel-row"><label>Escala:</label><select id="ajusteEscala" onchange="guardarAjustesDesdePanel()"><option value="compact">Compacto</option><option value="normal">Normal</option><option value="large">Grande</option></select></div><hr><div class="panel-row"><b>Sincronización con ordenador servidor</b></div><div class="panel-row"><label>IP / URL:</label><input id="ajusteSyncServerUrl" style="flex:1;min-width:240px" placeholder="http://192.168.1.50:8787"></div><div class="panel-row"><button onclick="guardarServidorSyncDesdeAjustes()">Guardar IP</button><button onclick="abrirPanel('panelSyncAuto')">Abrir sincronización</button></div>
+</div>
+<div id="panelJson" class="panel no-print"><button class="close-panel" onclick="cerrarPanel('panelJson')">Cerrar</button><h3>Exportar / Importar / Sincronizar JSON</h3><p>Para sincronizar dos dispositivos: en el dispositivo más actualizado pulsa <b>Copiar JSON</b>; en el otro pega ese JSON aquí y pulsa <b>Sincronizar desde caja</b>. La sincronización añade registros que falten y avisa de conflictos sin sobrescribir datos distintos.</p><div class="panel-row"><button onclick="exportarJSON()">Copiar JSON</button><button onclick="prepararJSON()">Ver JSON</button><button onclick="sincronizarJSON()">Sincronizar desde caja</button><button onclick="importarJSON()">Importar sustituyendo</button></div><textarea id="jsonBox" placeholder="Aquí aparecerá el JSON exportado o pega aquí un JSON para sincronizar/importar..."></textarea><div id="syncReport" class="sync-report" style="display:none"></div></div>
+<div id="panelSyncAuto" class="panel no-print"><button class="close-panel" onclick="cerrarPanel('panelSyncAuto')">Cerrar</button><h3>Sincronización automática con ordenador servidor</h3><p>Usa esta opción cuando el ordenador esté arrancado con <b>ARRANCAR_SERVIDOR.bat</b>. En el móvil escribe la IP que muestra el ordenador, por ejemplo <b>http://192.168.1.50:8787</b>, y pulsa sincronizar.</p><div class="panel-row"><label>IP / URL del servidor:</label><input id="syncServerUrl" style="flex:1;min-width:240px" placeholder="http://192.168.1.50:8787"></div><div class="panel-row"><button onclick="guardarServidorSync()">Guardar IP</button><button onclick="probarServidorSync()">Probar conexión</button><button onclick="sincronizarConServidor()">Sincronización automática</button></div><div class="panel-row"><button onclick="usarServidorActual()">Usar esta ventana como servidor</button><button onclick="copiarUrlActualServidor()">Copiar URL actual</button></div><div id="syncAutoReport" class="sync-report" style="display:none"></div></div>
+<div id="panelHistorial" class="panel no-print"><button class="close-panel" onclick="cerrarPanel('panelHistorial')">Cerrar</button><h3>Historial de cambios</h3><div class="panel-row"><button onclick="vaciarHistorial()">Vaciar historial</button></div><div id="historialBox"></div></div>
+<div id="panelInfoCambios" class="panel no-print"><button class="close-panel" onclick="cerrarPanel('panelInfoCambios')">Cerrar</button><h3>Último cambio registrado</h3><p>Esta fecha sirve para comparar qué dispositivo tiene los datos más recientes.</p><div id="infoCambiosBox" class="info-list"></div></div>
+
+<script>
+"use strict";
+const STORAGE_TAREAS="notas_tareas_v3_tareas",STORAGE_HISTORIAL="notas_tareas_v3_historial",STORAGE_FILTROS="notas_tareas_v3_filtros",STORAGE_AJUSTES="notas_tareas_v3_ajustes",STORAGE_ULTIMO_CAMBIO="notas_tareas_v3_ultimo_cambio",STORAGE_SYNC_SERVER="notas_tareas_v3_sync_server";
+let tareas=cargarJSONSeguro(STORAGE_TAREAS,[]),historial=cargarJSONSeguro(STORAGE_HISTORIAL,[]),ultimoCambio=cargarJSONSeguro(STORAGE_ULTIMO_CAMBIO,null),filtros=cargarJSONSeguro(STORAGE_FILTROS,{texto:"",dias:"",inicio:null,vence:null,fin:null,prioridades:[],estados:[]}),ajustes=cargarJSONSeguro(STORAGE_AJUSTES,{modo:"2d",tema:"blue",escala:"normal"});
+function cargarJSONSeguro(c,v){try{const r=localStorage.getItem(c);return r?JSON.parse(r):v}catch(e){return v}}
+function guardarJSONSeguro(c,v){try{localStorage.setItem(c,JSON.stringify(v));return true}catch(e){alert("No se pudo guardar en localStorage: "+e.message);return false}}
+function escapeHTML(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function normalizarTexto(v){return String(v??"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
+function hoySinHora(){const h=new Date();h.setHours(0,0,0,0);return h}
+function fechaSinHora(f){if(!f)return null;const d=new Date(f+"T00:00:00");d.setHours(0,0,0,0);return d}
+function diasHasta(f){const d=fechaSinHora(f);if(!d)return null;return Math.ceil((d.getTime()-hoySinHora().getTime())/(1000*60*60*24))}
+function generarId(){return"id_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,8)}
+function siguienteCodigo(){let max=0;tareas.forEach(t=>{const n=parseInt(String(t.cod||"").replace(/\D/g,""),10);if(!isNaN(n))max=Math.max(max,n)});return String(max+1).padStart(4,"0").slice(-4)}
+function registrarUltimoCambio(txt,fechaObj=new Date()){ultimoCambio={fechaISO:fechaObj.toISOString(),fecha:fechaObj.toLocaleString(),texto:String(txt||"Cambio realizado")};guardarJSONSeguro(STORAGE_ULTIMO_CAMBIO,ultimoCambio)}
+function logAccion(txt){const ahora=new Date();registrarUltimoCambio(txt,ahora);historial.unshift({fecha:ultimoCambio.fecha,fechaISO:ultimoCambio.fechaISO,texto:String(txt)});if(historial.length>500)historial=historial.slice(0,500);guardarJSONSeguro(STORAGE_HISTORIAL,historial)}
+function asegurarUltimoCambioInicial(){if(ultimoCambio&&ultimoCambio.fecha)return;if(Array.isArray(historial)&&historial.length&&historial[0].fecha){ultimoCambio={fechaISO:historial[0].fechaISO||"",fecha:historial[0].fecha,texto:historial[0].texto||"Último cambio registrado"};guardarJSONSeguro(STORAGE_ULTIMO_CAMBIO,ultimoCambio)}}
+function renderHistorial(){const b=document.getElementById("historialBox");b.innerHTML=historial.length?historial.map(h=>`<div style="border-bottom:1px solid #ddd;padding:5px 0;"><b>${escapeHTML(h.fecha)}</b><br>${escapeHTML(h.texto)}</div>`).join(""):"<p>No hay historial todavía.</p>"}
+function abrirInfoCambios(){abrirPanel("panelInfoCambios");renderInfoCambios()}
+function renderInfoCambios(){asegurarUltimoCambioInicial();const b=document.getElementById("infoCambiosBox");if(!b)return;if(ultimoCambio&&ultimoCambio.fecha){b.innerHTML=`<div class="info-label">Última modificación detectada:</div><div class="info-date">${escapeHTML(ultimoCambio.fecha)}</div><div style="margin-top:8px;">${escapeHTML(ultimoCambio.texto||"Cambio realizado")}</div>`}else{b.innerHTML="<p>No hay cambios registrados todavía.</p>"}}
+function vaciarHistorial(){if(!confirm("¿Vaciar todo el historial?"))return;registrarUltimoCambio("Historial borrado.");historial=[];guardarJSONSeguro(STORAGE_HISTORIAL,historial);renderHistorial()}
+function nuevaTarea(){const texto=prompt("Texto de la nueva tarea:");if(!texto||!texto.trim())return;const t={id:generarId(),cod:siguienteCodigo(),texto:texto.trim(),inicio:"",vence:"",fin:"",prioridad:"media",subtareas:[]};tareas.unshift(t);logAccion("Creada tarea "+t.cod+": "+t.texto);guardarTareasYRender()}
+function editarTarea(id){const t=tareas.find(x=>x.id===id);if(!t)return;const n=prompt("Editar tarea:",t.texto);if(!n||!n.trim())return;const a=t.texto;t.texto=n.trim();logAccion("Editada tarea "+t.cod+": "+a+" → "+t.texto);guardarTareasYRender()}
+function eliminarTarea(id){const i=tareas.findIndex(x=>x.id===id);if(i<0)return;if(!confirm("¿Eliminar esta tarea y sus subtareas?"))return;const t=tareas[i];tareas.splice(i,1);logAccion("Eliminada tarea "+t.cod+": "+t.texto);guardarTareasYRender()}
+function buscarSubtarea(lista,id){if(!Array.isArray(lista))return null;for(const s of lista){if(s.id===id)return s;const h=buscarSubtarea(s.subtareas,id);if(h)return h}return null}
+function eliminarSubtareaRec(lista,id){if(!Array.isArray(lista))return null;const i=lista.findIndex(x=>x.id===id);if(i>=0)return lista.splice(i,1)[0];for(const s of lista){const r=eliminarSubtareaRec(s.subtareas,id);if(r)return r}return null}
+function addSubtarea(id){const t=tareas.find(x=>x.id===id);if(!t)return;const texto=prompt("Nueva subtarea:");if(!texto||!texto.trim())return;if(!Array.isArray(t.subtareas))t.subtareas=[];t.subtareas.push({id:generarId(),cod:"",texto:texto.trim(),inicio:"",vence:"",fin:"",prioridad:"media",subtareas:[]});logAccion("Añadida subtarea en "+t.cod+": "+texto.trim());guardarTareasYRender()}
+function addSubtareaDentro(tid,sid){const t=tareas.find(x=>x.id===tid);if(!t)return;const padre=buscarSubtarea(t.subtareas,sid);if(!padre)return;const texto=prompt("Nueva subtarea dentro de esta subtarea:");if(!texto||!texto.trim())return;if(!Array.isArray(padre.subtareas))padre.subtareas=[];padre.subtareas.push({id:generarId(),cod:"",texto:texto.trim(),inicio:"",vence:"",fin:"",prioridad:"media",subtareas:[]});logAccion("Añadida subtarea dentro de subtarea en "+t.cod+": "+texto.trim());guardarTareasYRender()}
+function editarSubtarea(tid,sid){const t=tareas.find(x=>x.id===tid);if(!t||!Array.isArray(t.subtareas))return;const s=buscarSubtarea(t.subtareas,sid);if(!s)return;const n=prompt("Editar subtarea:",s.texto);if(!n||!n.trim())return;const a=s.texto;s.texto=n.trim();logAccion("Editada subtarea en "+t.cod+": "+a+" → "+s.texto);guardarTareasYRender()}
+function eliminarSubtarea(tid,sid){const t=tareas.find(x=>x.id===tid);if(!t||!Array.isArray(t.subtareas))return;if(!confirm("¿Eliminar esta subtarea y sus subtareas internas?"))return;const s=eliminarSubtareaRec(t.subtareas,sid);if(!s)return;logAccion("Eliminada subtarea en "+t.cod+": "+s.texto);guardarTareasYRender()}
+function guardarTareasYRender(){guardarJSONSeguro(STORAGE_TAREAS,tareas);render()}
+function getEstado(t){if(t.fin)return{texto:"FINALIZADA",clase:"finalizada"};if(t.vence){const d=diasHasta(t.vence);if(d!==null&&d<0)return{texto:"VENCIDA",clase:"vencida"}}if(t.inicio)return{texto:"INICIADA",clase:"iniciada"};return{texto:"PENDIENTE",clase:""}}
+function avisarAndroid(txt){try{if(window.Android&&typeof Android.lanzarAlarma==="function")Android.lanzarAlarma(txt)}catch(e){}}
+function revisarAlarmas(lista){let avisadas={};try{avisadas=JSON.parse(sessionStorage.getItem("notas_tareas_v3_avisadas_sesion")||"{}")}catch(e){};let cambiado=false;lista.forEach(t=>{if(!t.vence||t.fin)return;const d=diasHasta(t.vence);if(d!==null&&d>=0&&d<=1&&!avisadas[t.id]){avisadas[t.id]=true;cambiado=true;avisarAndroid("Vence pronto: "+t.cod+" - "+t.texto)}});if(cambiado)sessionStorage.setItem("notas_tareas_v3_avisadas_sesion",JSON.stringify(avisadas))}
+function toggleMultiFiltro(ev,id){ev.stopPropagation();document.querySelectorAll(".multi-filter-panel").forEach(p=>{if(p.id!==id)p.style.display="none"});const p=document.getElementById(id);if(p.style.display==="block"){p.style.display="none";return}const r=ev.currentTarget.getBoundingClientRect();p.style.left=Math.max(6,Math.min(r.left,window.innerWidth-p.offsetWidth-12))+"px";p.style.top=Math.min(r.bottom+6,window.innerHeight-20)+"px";p.style.right="auto";p.style.display="block"}
+document.addEventListener("click",()=>{document.querySelectorAll(".multi-filter-panel").forEach(p=>p.style.display="none")});
+function onMultiFiltroChange(tipo){const panelId=tipo==="prioridades"?"prioFilterPanel":"estadoFilterPanel";filtros[tipo]=Array.from(document.querySelectorAll("#"+panelId+" input[type=checkbox]:checked")).map(x=>x.value);guardarJSONSeguro(STORAGE_FILTROS,filtros);render()}
+function marcarTodasMulti(tipo){const panelId=tipo==="prioridades"?"prioFilterPanel":"estadoFilterPanel";document.querySelectorAll("#"+panelId+" input[type=checkbox]").forEach(x=>x.checked=true);onMultiFiltroChange(tipo)}
+function limpiarMulti(tipo){const panelId=tipo==="prioridades"?"prioFilterPanel":"estadoFilterPanel";document.querySelectorAll("#"+panelId+" input[type=checkbox]").forEach(x=>x.checked=false);onMultiFiltroChange(tipo)}
+function cargarMultiFiltrosEnPantalla(){const prioridades=Array.isArray(filtros.prioridades)?filtros.prioridades:[];const estados=Array.isArray(filtros.estados)?filtros.estados:[];document.querySelectorAll("#prioFilterPanel input[type=checkbox]").forEach(x=>x.checked=prioridades.includes(x.value));document.querySelectorAll("#estadoFilterPanel input[type=checkbox]").forEach(x=>x.checked=estados.includes(x.value))}
+function onFilterChange(){filtros.texto=document.getElementById("textoFiltro").value;filtros.dias=document.getElementById("diasFiltro").value;guardarJSONSeguro(STORAGE_FILTROS,filtros);render()}
+function setFiltroEstado(tipo,valor){filtros[tipo]=filtros[tipo]===valor?null:valor;guardarJSONSeguro(STORAGE_FILTROS,filtros);render()}
+function limpiarFiltros(){filtros={texto:"",dias:"",inicio:null,vence:null,fin:null,prioridades:[],estados:[]};guardarJSONSeguro(STORAGE_FILTROS,filtros);document.getElementById("textoFiltro").value="";document.getElementById("diasFiltro").value="";cargarMultiFiltrosEnPantalla();render()}
+function subtareaCumpleMultiFiltros(s){if(Array.isArray(filtros.prioridades)&&filtros.prioridades.length>0&&!filtros.prioridades.includes(s.prioridad||"media"))return false;if(Array.isArray(filtros.estados)&&filtros.estados.length>0&&!filtros.estados.includes(getEstado(s).texto))return false;return true}
+function tieneSubtareaQueCumpleMultiFiltros(lista){if(!Array.isArray(lista))return false;return lista.some(s=>subtareaCumpleMultiFiltros(s)||tieneSubtareaQueCumpleMultiFiltros(s.subtareas))}
+function cumpleFiltros(t){const txt=normalizarTexto(filtros.texto);if(txt){const total=normalizarTexto([t.cod,t.texto,...(Array.isArray(t.subtareas)?t.subtareas.map(s=>s.texto):[])].join(" "));if(!total.includes(txt))return false}if(filtros.dias!==""&&filtros.dias!=null){const n=parseInt(filtros.dias,10);if(!isNaN(n)&&n>=0){if(!t.vence)return false;const d=diasHasta(t.vence);if(d===null||d<0||d>n)return false}}if(filtros.inicio){if(filtros.inicio==="si"&&!t.inicio)return false;if(filtros.inicio==="no"&&t.inicio)return false}if(filtros.fin){if(filtros.fin==="si"&&!t.fin)return false;if(filtros.fin==="no"&&t.fin)return false}if(filtros.vence){const d=diasHasta(t.vence),vencida=d!==null&&d<0;if(filtros.vence==="ok"&&vencida)return false;if(filtros.vence==="mal"&&!vencida)return false}const hayFiltroPrioridad=Array.isArray(filtros.prioridades)&&filtros.prioridades.length>0;const hayFiltroEstado=Array.isArray(filtros.estados)&&filtros.estados.length>0;if(hayFiltroPrioridad||hayFiltroEstado){const tareaCumple=(!hayFiltroPrioridad||filtros.prioridades.includes(t.prioridad||"media"))&&(!hayFiltroEstado||filtros.estados.includes(getEstado(t).texto));const algunaSubCumple=tieneSubtareaQueCumpleMultiFiltros(t.subtareas);if(!tareaCumple&&!algunaSubCumple)return false}return true}
+function marcarFiltrosActivos(){[["fInicioSi",filtros.inicio==="si"],["fInicioNo",filtros.inicio==="no"],["fVenceOk",filtros.vence==="ok"],["fVenceMal",filtros.vence==="mal"],["fFinSi",filtros.fin==="si"],["fFinNo",filtros.fin==="no"]].forEach(([id,a])=>{const e=document.getElementById(id);if(e)e.classList.toggle("filter-active",!!a)})}
+function render(){const tb=document.getElementById("tablaTareas");tb.innerHTML="";marcarFiltrosActivos();const visibles=tareas.filter(cumpleFiltros).sort((a,b)=>Number(b.cod||0)-Number(a.cod||0));visibles.forEach(t=>{if(!Array.isArray(t.subtareas))t.subtareas=[];if(!t.id)t.id=generarId();if(!t.cod)t.cod=siguienteCodigo();if(!t.prioridad)t.prioridad="media";const e=getEstado(t);const tr=document.createElement("tr");tr.className=[e.clase,"prio-"+t.prioridad].filter(Boolean).join(" ");tr.innerHTML=`<td class="col-fecha"><input class="date-input" type="date" value="${escapeHTML(t.inicio)}" onchange="actualizarCampo('${t.id}','inicio',this.value)"></td><td class="col-fecha"><input class="date-input" type="date" value="${escapeHTML(t.vence)}" onchange="actualizarCampo('${t.id}','vence',this.value)"></td><td class="col-fecha"><input class="date-input" type="date" value="${escapeHTML(t.fin)}" onchange="actualizarCampo('${t.id}','fin',this.value)"></td><td class="col-cod">${escapeHTML(t.cod)}</td><td class="col-tarea">${escapeHTML(t.texto)}</td><td class="col-prio"><select class="prio-select" onchange="actualizarCampo('${t.id}','prioridad',this.value)"><option value="baja" ${t.prioridad==="baja"?"selected":""}>baja</option><option value="media" ${t.prioridad==="media"?"selected":""}>media</option><option value="alta" ${t.prioridad==="alta"?"selected":""}>alta</option><option value="critica" ${t.prioridad==="critica"?"selected":""}>crítica</option></select></td><td class="col-estado">${e.texto}</td><td class="col-acciones no-print"><div class="actions"><button title="Añadir subtarea" onclick="addSubtarea('${t.id}')">＋</button><button title="Editar tarea" onclick="editarTarea('${t.id}')">✎</button><button title="Eliminar tarea" onclick="eliminarTarea('${t.id}')">🗑</button></div></td>`;tb.appendChild(tr);renderSubtareas(tb,t,t.subtareas,1)});revisarAlarmas(visibles)}
+function actualizarCampoSubtarea(tid,sid,campo,valor){const t=tareas.find(x=>x.id===tid);if(!t)return;const s=buscarSubtarea(t.subtareas,sid);if(!s)return;const a=s[campo]??"";s[campo]=valor;logAccion("Actualizado "+campo+" en subtarea de "+t.cod+": "+a+" → "+valor);guardarTareasYRender()}
+function renderSubtareas(tb,t,lista,nivel){if(!Array.isArray(lista))return;lista.forEach(s=>{if(!subtareaCumpleMultiFiltros(s)&&!tieneSubtareaQueCumpleMultiFiltros(s.subtareas))return;if(!s.id)s.id=generarId();if(!Array.isArray(s.subtareas))s.subtareas=[];if(!s.prioridad)s.prioridad="media";if(s.inicio===undefined)s.inicio="";if(s.vence===undefined)s.vence="";if(s.fin===undefined)s.fin="";const e=getEstado(s);const sr=document.createElement("tr");sr.className=["sub-row",e.clase,"prio-"+s.prioridad].filter(Boolean).join(" ");const margen=Math.min(22*nivel,88);sr.innerHTML=`<td class="col-fecha"><input class="date-input" type="date" value="${escapeHTML(s.inicio)}" onchange="actualizarCampoSubtarea('${t.id}','${s.id}','inicio',this.value)"></td><td class="col-fecha"><input class="date-input" type="date" value="${escapeHTML(s.vence)}" onchange="actualizarCampoSubtarea('${t.id}','${s.id}','vence',this.value)"></td><td class="col-fecha"><input class="date-input" type="date" value="${escapeHTML(s.fin)}" onchange="actualizarCampoSubtarea('${t.id}','${s.id}','fin',this.value)"></td><td class="col-cod"></td><td class="col-tarea subtask" style="padding-left:${margen}px">└─ ${escapeHTML(s.texto)}</td><td class="col-prio"><select class="prio-select" onchange="actualizarCampoSubtarea('${t.id}','${s.id}','prioridad',this.value)"><option value="baja" ${s.prioridad==="baja"?"selected":""}>baja</option><option value="media" ${s.prioridad==="media"?"selected":""}>media</option><option value="alta" ${s.prioridad==="alta"?"selected":""}>alta</option><option value="critica" ${s.prioridad==="critica"?"selected":""}>crítica</option></select></td><td class="col-estado">${e.texto}</td><td class="col-acciones no-print"><div class="actions"><button title="Añadir subtarea dentro" onclick="addSubtareaDentro('${t.id}','${s.id}')">＋</button><button title="Editar subtarea" onclick="editarSubtarea('${t.id}','${s.id}')">✎</button><button title="Eliminar subtarea" onclick="eliminarSubtarea('${t.id}','${s.id}')">🗑</button></div></td>`;tb.appendChild(sr);renderSubtareas(tb,t,s.subtareas,nivel+1)})}
+function actualizarCampo(id,campo,valor){const t=tareas.find(x=>x.id===id);if(!t)return;const a=t[campo]??"";t[campo]=valor;logAccion("Actualizado "+campo+" en "+t.cod+": "+a+" → "+valor);guardarTareasYRender()}
+function prepararJSON(){asegurarUltimoCambioInicial();const data={version:4,app:"Notas de Tareas",fechaExportacion:new Date().toISOString(),ultimoCambio,tareas,historial,filtros,ajustes};document.getElementById("jsonBox").value=JSON.stringify(data,null,2)}
+function exportarJSON(){prepararJSON();copiarTexto(document.getElementById("jsonBox").value,"JSON copiado al portapapeles.")}
+function importarJSON(){const raw=document.getElementById("jsonBox").value.trim();if(!raw){alert("Pega primero el JSON en la caja.");return}try{const data=JSON.parse(raw);let nt,ultimoCambioImportado=false;if(Array.isArray(data))nt=data;else if(data&&Array.isArray(data.tareas)){nt=data.tareas;if(Array.isArray(data.historial))historial=data.historial;if(data.ultimoCambio&&typeof data.ultimoCambio==="object"&&data.ultimoCambio.fecha){ultimoCambio=data.ultimoCambio;ultimoCambioImportado=true}if(data.filtros&&typeof data.filtros==="object")filtros=data.filtros;if(data.ajustes&&typeof data.ajustes==="object")ajustes=data.ajustes}else throw new Error("El JSON no contiene una lista de tareas válida.");if(!confirm("¿Importar estas tareas? Se sustituirán las tareas actuales."))return;tareas=normalizarTareasImportadas(nt);if(!ultimoCambioImportado)registrarUltimoCambio("Importación JSON realizada.");guardarJSONSeguro(STORAGE_TAREAS,tareas);guardarJSONSeguro(STORAGE_HISTORIAL,historial);guardarJSONSeguro(STORAGE_ULTIMO_CAMBIO,ultimoCambio);guardarJSONSeguro(STORAGE_FILTROS,filtros);guardarJSONSeguro(STORAGE_AJUSTES,ajustes);aplicarAjustes();cargarFiltrosEnPantalla();render();alert("Importación correcta.")}catch(e){alert("JSON no válido: "+e.message)}}
+function extraerDatosJSON(raw){const data=JSON.parse(raw);let nt;if(Array.isArray(data))nt=data;else if(data&&Array.isArray(data.tareas))nt=data.tareas;else throw new Error("El JSON no contiene una lista de tareas válida.");return{data,tareas:normalizarTareasImportadas(nt)}}
+function siguienteCodigoDesdeLista(lista){let max=0;(lista||[]).forEach(t=>{const n=parseInt(String(t.cod||"").replace(/\D/g,""),10);if(!isNaN(n))max=Math.max(max,n)});return String(max+1).padStart(4,"0").slice(-4)}
+function clonarRegistro(o){return JSON.parse(JSON.stringify(o))}
+function campoDiferente(a,b,c){return String(a&&a[c]!==undefined?a[c]:"")!==String(b&&b[c]!==undefined?b[c]:"")}
+function descripcionRegistro(r,padre){return (padre?"Subtarea de "+padre+"":"Tarea "+(r.cod||"sin código"))+": "+String(r.texto||"sin texto").slice(0,80)}
+function fusionarSubtareas(localLista,importLista,reporte,padreCod){if(!Array.isArray(localLista))localLista=[];(importLista||[]).forEach(imp=>{const loc=localLista.find(x=>x.id&&imp.id&&x.id===imp.id);if(!loc){localLista.push(clonarRegistro(imp));reporte.subtareasAnadidas++;return}const campos=["texto","inicio","vence","fin","prioridad"];campos.forEach(c=>{if(campoDiferente(loc,imp,c)){reporte.conflictos.push(descripcionRegistro(loc,padreCod)+" | campo "+c+" distinto. Local: ["+String(loc[c]||"")+"] / Importado: ["+String(imp[c]||"")+"]")}});if(!Array.isArray(loc.subtareas))loc.subtareas=[];fusionarSubtareas(loc.subtareas,imp.subtareas||[],reporte,padreCod)})}
+function fusionarTareas(locales,importadas){const reporte={tareasAnadidas:0,subtareasAnadidas:0,iguales:0,conflictos:[],codigosRenumerados:[]};const idsLocales=new Set((locales||[]).map(t=>t.id).filter(Boolean));const codigosLocales=()=>new Set((locales||[]).map(t=>String(t.cod||"")).filter(Boolean));(importadas||[]).forEach(imp=>{const loc=locales.find(x=>x.id&&imp.id&&x.id===imp.id);if(!loc){const copia=clonarRegistro(imp);const usados=codigosLocales();if(copia.cod&&usados.has(String(copia.cod))){const old=copia.cod;copia.cod=siguienteCodigoDesdeLista(locales);reporte.codigosRenumerados.push(old+" → "+copia.cod+" (registro importado: "+String(copia.texto||"").slice(0,60)+")")}locales.push(copia);idsLocales.add(copia.id);reporte.tareasAnadidas++;return}let diferente=false;["texto","inicio","vence","fin","prioridad"].forEach(c=>{if(campoDiferente(loc,imp,c)){diferente=true;reporte.conflictos.push(descripcionRegistro(loc)+" | campo "+c+" distinto. Local: ["+String(loc[c]||"")+"] / Importado: ["+String(imp[c]||"")+"]")}});if(!diferente)reporte.iguales++;if(!Array.isArray(loc.subtareas))loc.subtareas=[];fusionarSubtareas(loc.subtareas,imp.subtareas||[],reporte,loc.cod||"")});return reporte}
+function pintarInformeSync(reporte){const b=document.getElementById("syncReport");if(!b)return;let txt="SINCRONIZACIÓN FINALIZADA\n\n";txt+="Tareas nuevas añadidas: "+reporte.tareasAnadidas+"\n";txt+="Subtareas nuevas añadidas: "+reporte.subtareasAnadidas+"\n";txt+="Registros ya existentes sin cambios: "+reporte.iguales+"\n";if(reporte.codigosRenumerados.length){txt+="\nCÓDIGOS RENUMERADOS PARA EVITAR DUPLICADOS:\n- "+reporte.codigosRenumerados.join("\n- ")+"\n"}if(reporte.conflictos.length){txt+="\nCONFLICTOS DETECTADOS:\nNo se han sobrescrito los datos locales. Revisa estas diferencias manualmente si quieres conservar el valor importado.\n- "+reporte.conflictos.join("\n- ")}else{txt+="\nNo se han detectado conflictos."}b.style.display="block";b.className="sync-report "+(reporte.conflictos.length?"sync-warn":"sync-ok");b.textContent=txt}
+function sincronizarJSON(){const raw=document.getElementById("jsonBox").value.trim();if(!raw){alert("Pega primero el JSON del otro dispositivo en la caja.");return}try{const extraido=extraerDatosJSON(raw);if(!confirm("¿Sincronizar los datos pegados con los datos actuales? Se añadirán los registros que falten y NO se sobrescribirán conflictos."))return;const importadas=extraido.tareas;const reporte=fusionarTareas(tareas,importadas);if(extraido.data&&Array.isArray(extraido.data.historial)){const vistos=new Set(historial.map(h=>String(h.fechaISO||"")+"|"+String(h.texto||"")));extraido.data.historial.forEach(h=>{const k=String(h.fechaISO||"")+"|"+String(h.texto||"");if(!vistos.has(k)){historial.push(h);vistos.add(k)}});historial.sort((a,b)=>String(b.fechaISO||"").localeCompare(String(a.fechaISO||"")));if(historial.length>500)historial=historial.slice(0,500)}logAccion("Sincronización JSON: "+reporte.tareasAnadidas+" tareas y "+reporte.subtareasAnadidas+" subtareas añadidas; "+reporte.conflictos.length+" conflictos detectados.");guardarJSONSeguro(STORAGE_TAREAS,tareas);guardarJSONSeguro(STORAGE_HISTORIAL,historial);guardarJSONSeguro(STORAGE_ULTIMO_CAMBIO,ultimoCambio);render();pintarInformeSync(reporte);alert("Sincronización finalizada. Revisa el informe del panel.")}catch(e){const b=document.getElementById("syncReport");if(b){b.style.display="block";b.className="sync-report sync-error";b.textContent="JSON no válido: "+e.message}alert("JSON no válido: "+e.message)}}
+
+function normalizarUrlServidor(url){
+  url=String(url||"").trim();
+  if(!url && location.protocol && /^https?:$/i.test(location.protocol)) url=location.origin;
+  url=url.replace(/\s+/g,"").replace(/\/+$/,"");
+  if(url && !/^https?:\/\//i.test(url)) url="http://"+url;
+  try{
+    if(url){ const u=new URL(url); return u.origin; }
+  }catch(e){}
+  return url;
+}
+function construirUrlApi(base,ruta){
+  base=normalizarUrlServidor(base);
+  if(!base) throw new Error("No hay IP/URL del servidor configurada.");
+  return new URL(ruta, base+"/").toString();
+}
+function getServidorSync(){
+  const guardado=String(cargarJSONSeguro(STORAGE_SYNC_SERVER,"")||"").trim();
+  if(guardado) return normalizarUrlServidor(guardado);
+  if(location.protocol && /^https?:$/i.test(location.protocol)) return location.origin;
+  return "";
+}
+function setServidorSync(url){
+  url=normalizarUrlServidor(url);
+  guardarJSONSeguro(STORAGE_SYNC_SERVER,url);
+  const a=document.getElementById("syncServerUrl"),b=document.getElementById("ajusteSyncServerUrl");
+  if(a)a.value=url;
+  if(b)b.value=url;
+  return url;
+}
+function cargarServidorSyncEnPantalla(){
+  const url=getServidorSync();
+  const a=document.getElementById("syncServerUrl"),b=document.getElementById("ajusteSyncServerUrl");
+  if(a&&!a.value)a.value=url;
+  if(b&&!b.value)b.value=url;
+}
+function guardarServidorSync(){const url=setServidorSync(document.getElementById("syncServerUrl").value);alert(url?"IP del servidor guardada.":"IP del servidor vacía.")}
+function guardarServidorSyncDesdeAjustes(){const url=setServidorSync(document.getElementById("ajusteSyncServerUrl").value);alert(url?"IP del servidor guardada.":"IP del servidor vacía.")}
+function usarServidorActual(){
+  const base=(location.origin&&location.origin!=="null")?location.origin:"";
+  if(!base){alert("Esta ventana está abierta como archivo local. Arranca primero ARRANCAR_SERVIDOR.bat y abre la app desde http://localhost:8787/index.html.");return}
+  setServidorSync(base);alert("Se ha guardado esta dirección como servidor: "+base)
+}
+function copiarUrlActualServidor(){
+  const base=(location.origin&&location.origin!=="null")?location.origin:"";
+  if(!base){alert("Esta ventana está abierta como archivo local; no hay URL de servidor que copiar.");return}
+  copiarTexto(base,"URL del servidor copiada.")
+}
+function pintarInformeSyncAuto(txt,clase){const b=document.getElementById("syncAutoReport");if(!b)return;b.style.display="block";b.className="sync-report "+(clase||"");b.textContent=txt}
+async function probarServidorSync(){
+  const input=document.getElementById("syncServerUrl");
+  const url=setServidorSync((input&&input.value)||getServidorSync());
+  if(!url){alert("Escribe primero la IP / URL del servidor.");return}
+  try{
+    const r=await fetch(construirUrlApi(url,"/api/status"),{cache:"no-store"});
+    if(!r.ok)throw new Error("HTTP "+r.status);
+    const data=await r.json();
+    pintarInformeSyncAuto("CONEXIÓN CORRECTA\n\nServidor: "+(data.nombre||"Servidor local")+"\nIP informada: "+(data.ip||"no disponible")+"\nRegistros guardados en servidor: "+(data.tareas||0)+"\nÚltima actualización servidor: "+(data.exportadoEn||"sin datos"),"sync-ok")
+  }catch(e){
+    pintarInformeSyncAuto("NO SE PUDO CONECTAR\n\nRevisa que el ordenador tenga ARRANCAR_SERVIDOR.bat abierto, que móvil y ordenador estén en la misma WiFi, que el cortafuegos permita Node.js y que hayas escrito bien la IP.\n\nDetalle: "+e.message,"sync-error")
+  }
+}
+function fusionarHistorialDesdePaquete(data){if(!data||!Array.isArray(data.historial))return 0;let n=0;const vistos=new Set(historial.map(h=>String(h.fechaISO||"")+"|"+String(h.texto||"")));data.historial.forEach(h=>{const k=String(h.fechaISO||"")+"|"+String(h.texto||"");if(!vistos.has(k)){historial.push(h);vistos.add(k);n++}});historial.sort((a,b)=>String(b.fechaISO||"").localeCompare(String(a.fechaISO||"")));if(historial.length>500)historial=historial.slice(0,500);return n}
+function contarSubtareasLista(lista){let n=0;(lista||[]).forEach(s=>{n++;n+=contarSubtareasLista(s.subtareas||[])});return n}
+function resumenServidor(data){const ts=(data&&Array.isArray(data.tareas))?data.tareas:[];return ts.length+" tareas / "+contarSubtareasLista(ts)+" subtareas"}
+
+function crearPaqueteDatos(){
+  asegurarUltimoCambioInicial();
+  // Paquete completo que se envía al servidor del ordenador.
+  // Se clona para evitar que la fusión modifique objetos por referencia.
+  const paquete={
+    version:"v3-servidor",
+    app:"Notas de Tareas",
+    exportadoEn:new Date().toISOString(),
+    ultimoCambio:ultimoCambio||null,
+    tareas:normalizarTareasImportadas(clonarRegistro(tareas||[])),
+    historial:Array.isArray(historial)?clonarRegistro(historial):[],
+    filtros:clonarRegistro(filtros||{}),
+    ajustes:clonarRegistro(ajustes||{})
+  };
+  return paquete;
+}
+async function obtenerDatosServidor(url){
+  const r=await fetch(construirUrlApi(url,"/api/data"),{cache:"no-store"});
+  if(!r.ok)throw new Error("HTTP "+r.status);
+  const j=await r.json();
+  if(!j.ok)throw new Error(j.error||"Respuesta no válida del servidor");
+  return j.data||{};
+}
+async function enviarDatosAlServidor(url,paquete){
+  const r=await fetch(construirUrlApi(url,"/api/sync"),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(paquete)});
+  if(!r.ok)throw new Error("HTTP "+r.status);
+  const j=await r.json();
+  if(!j.ok)throw new Error(j.error||"Respuesta no válida del servidor");
+  return j;
+}
+async function sincronizarConServidor(){
+  const input=document.getElementById("syncServerUrl");
+  const url=setServidorSync((input&&input.value)||getServidorSync());
+  if(!url){alert("Escribe primero la IP / URL del servidor del ordenador.");return}
+  try{
+    pintarInformeSyncAuto("Sincronizando con "+url+" ...\n\n1/3 Leyendo datos del servidor...","");
+    const antesLocal=tareas.length;
+    const dataAntesServidor=await obtenerDatosServidor(url);
+    const resumenAntesServidor=resumenServidor(dataAntesServidor);
+
+    pintarInformeSyncAuto("Sincronizando con "+url+" ...\n\n2/3 Enviando datos de esta app al servidor...","");
+    const respuesta=await enviarDatosAlServidor(url,crearPaqueteDatos());
+
+    pintarInformeSyncAuto("Sincronizando con "+url+" ...\n\n3/3 Recibiendo datos fusionados del servidor...","");
+    const dataServidor=respuesta.data||{};
+    const reporteLocal=fusionarTareas(tareas,normalizarTareasImportadas(dataServidor.tareas||[]));
+    const histN=fusionarHistorialDesdePaquete(dataServidor);
+
+    if(dataServidor.ultimoCambio && (!ultimoCambio || String(dataServidor.ultimoCambio.fechaISO||"")>String(ultimoCambio.fechaISO||""))) ultimoCambio=dataServidor.ultimoCambio;
+    guardarJSONSeguro(STORAGE_TAREAS,tareas);
+    guardarJSONSeguro(STORAGE_HISTORIAL,historial);
+    guardarJSONSeguro(STORAGE_ULTIMO_CAMBIO,ultimoCambio);
+    render();
+
+    const conflictosServidor=(respuesta.reporte&&Array.isArray(respuesta.reporte.conflictos))?respuesta.reporte.conflictos:[];
+    let txt="SINCRONIZACIÓN AUTOMÁTICA FINALIZADA\n\n";
+    txt+="Servidor usado: "+url+"\n";
+    txt+="Servidor antes: "+resumenAntesServidor+"\n";
+    txt+="Servidor después: "+resumenServidor(dataServidor)+"\n\n";
+    txt+="Esta app antes: "+antesLocal+" tareas\n";
+    txt+="Esta app ahora: "+tareas.length+" tareas\n";
+    txt+="Añadido a esta app: "+reporteLocal.tareasAnadidas+" tareas y "+reporteLocal.subtareasAnadidas+" subtareas\n";
+    txt+="Añadido al servidor: "+((respuesta.reporte&&respuesta.reporte.tareasAnadidas)||0)+" tareas y "+((respuesta.reporte&&respuesta.reporte.subtareasAnadidas)||0)+" subtareas\n";
+    txt+="Historial añadido a esta app: "+histN+" entradas\n";
+    txt+="Historial añadido al servidor: "+((respuesta.reporte&&respuesta.reporte.historialAnadido)||0)+" entradas\n";
+    txt+="Conflictos en esta app: "+reporteLocal.conflictos.length+"\n";
+    txt+="Conflictos en servidor: "+conflictosServidor.length+"\n";
+    if(reporteLocal.codigosRenumerados&&reporteLocal.codigosRenumerados.length){txt+="\nCÓDIGOS RENUMERADOS EN ESTA APP:\n- "+reporteLocal.codigosRenumerados.join("\n- ")+"\n"}
+    if(respuesta.reporte&&respuesta.reporte.codigosRenumerados&&respuesta.reporte.codigosRenumerados.length){txt+="\nCÓDIGOS RENUMERADOS EN SERVIDOR:\n- "+respuesta.reporte.codigosRenumerados.join("\n- ")+"\n"}
+    if(reporteLocal.conflictos.length){txt+="\nCONFLICTOS EN ESTA APP:\n- "+reporteLocal.conflictos.join("\n- ")}
+    if(conflictosServidor.length){txt+="\n\nCONFLICTOS EN EL SERVIDOR:\n- "+conflictosServidor.join("\n- ")}
+    if(!reporteLocal.conflictos.length&&!conflictosServidor.length){txt+="\nNo se han detectado conflictos."}
+    logAccion("Sincronización automática completada con "+url+": "+reporteLocal.tareasAnadidas+" tareas añadidas en esta app; "+(((respuesta.reporte&&respuesta.reporte.tareasAnadidas)||0))+" tareas añadidas al servidor; "+(reporteLocal.conflictos.length+conflictosServidor.length)+" conflictos.");
+    guardarJSONSeguro(STORAGE_HISTORIAL,historial);
+    pintarInformeSyncAuto(txt,(reporteLocal.conflictos.length||conflictosServidor.length)?"sync-warn":"sync-ok");
+    alert("Sincronización automática finalizada. Revisa el informe.")
+  }catch(e){
+    pintarInformeSyncAuto("ERROR DE SINCRONIZACIÓN\n\n"+e.message+"\n\nComprueba que el servidor esté arrancado en el ordenador, que la IP sea correcta y que el móvil y el ordenador estén en la misma red WiFi.","sync-error");
+    alert("No se pudo sincronizar: "+e.message)
+  }
+}
+function normalizarSubtareas(lista){if(!Array.isArray(lista))return[];return lista.map(s=>typeof s==="string"?{id:generarId(),cod:"",texto:s,inicio:"",vence:"",fin:"",prioridad:"media",subtareas:[]}:{id:s.id||generarId(),cod:s.cod||"",texto:String(s.texto||""),inicio:s.inicio||"",vence:s.vence||"",fin:s.fin||"",prioridad:["baja","media","alta","critica"].includes(s.prioridad)?s.prioridad:"media",subtareas:normalizarSubtareas(s.subtareas||s.subs)})}
+function normalizarTareasImportadas(lista){return lista.map((t,i)=>({id:t.id||generarId(),cod:String(t.cod||String(i+1).padStart(4,"0")).slice(-4).padStart(4,"0"),texto:String(t.texto||t.tarea||"Sin texto"),inicio:t.inicio||"",vence:t.vence||"",fin:t.fin||"",prioridad:["baja","media","alta","critica"].includes(t.prioridad)?t.prioridad:"media",subtareas:normalizarSubtareas(t.subtareas||t.subs)}))}
+function exportarExcel(){let txt="INICIO\tVENCE\tFIN\tCOD\tTAREA\tPRIORIDAD\tESTADO\n";function addSubExcel(lista,nivel){(lista||[]).forEach(s=>{txt+=[s.inicio||"",s.vence||"",s.fin||"","",("  ".repeat(nivel))+"└─ "+limpiarTSV(s.texto),s.prioridad||"",getEstado(s).texto].join("\t")+"\n";addSubExcel(s.subtareas,nivel+1)})}tareas.forEach(t=>{txt+=[t.inicio||"",t.vence||"",t.fin||"",t.cod||"",limpiarTSV(t.texto),t.prioridad||"",getEstado(t).texto].join("\t")+"\n";addSubExcel(t.subtareas,1)});copiarTexto(txt,"Tabla copiada para pegar en Excel.")}
+function limpiarTSV(t){return String(t??"").replace(/\t/g," ").replace(/\r?\n/g," ")}
+function copiarTexto(txt,msg){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(()=>alert(msg)).catch(()=>prompt("Copia manualmente:",txt))}else prompt("Copia manualmente:",txt)}
+function abrirPanel(id){document.querySelectorAll(".panel").forEach(p=>p.style.display="none");document.getElementById(id).style.display="block";if(id==="panelJson")prepararJSON();if(id==="panelSyncAuto"||id==="panelAjustes")cargarServidorSyncEnPantalla()}
+function cerrarPanel(id){document.getElementById(id).style.display="none"}
+function aplicarAjustes(){document.body.className="";document.body.classList.add("mode-"+(ajustes.modo||"2d"));document.body.classList.add("theme-"+(ajustes.tema||"blue"));document.body.classList.add("size-"+(ajustes.escala||"normal"));const m=document.getElementById("ajusteModo"),t=document.getElementById("ajusteTema"),e=document.getElementById("ajusteEscala");if(m)m.value=ajustes.modo||"2d";if(t)t.value=ajustes.tema||"blue";if(e)e.value=ajustes.escala||"normal"}
+function guardarAjustesDesdePanel(){ajustes={modo:document.getElementById("ajusteModo").value,tema:document.getElementById("ajusteTema").value,escala:document.getElementById("ajusteEscala").value};guardarJSONSeguro(STORAGE_AJUSTES,ajustes);aplicarAjustes()}
+function actualizarOffsetCabecera(){const tb=document.querySelector(".topbar");if(tb)document.documentElement.style.setProperty("--sticky-offset",(tb.offsetHeight+8)+"px")}
+function cargarFiltrosEnPantalla(){document.getElementById("textoFiltro").value=filtros.texto||"";document.getElementById("diasFiltro").value=filtros.dias||"";cargarMultiFiltrosEnPantalla();actualizarOffsetCabecera()}
+window.addEventListener("resize",actualizarOffsetCabecera);
+window.addEventListener("load",()=>{if(!Array.isArray(filtros.prioridades))filtros.prioridades=[];if(!Array.isArray(filtros.estados))filtros.estados=[];tareas=normalizarTareasImportadas(tareas);guardarJSONSeguro(STORAGE_TAREAS,tareas);asegurarUltimoCambioInicial();aplicarAjustes();cargarServidorSyncEnPantalla();cargarFiltrosEnPantalla();actualizarOffsetCabecera();render()});
+
+
+/* ============================================================
+   V23 - Sincronización por última modificación
+   ------------------------------------------------------------
+   Regla aplicada: si el mismo registro existe en dos dispositivos
+   con campos distintos, gana automáticamente la versión con
+   ultimaModificacion más reciente. Si no hay fecha válida o empatan,
+   se informa como conflicto y no se sobrescribe.
+   ============================================================ */
+function fechaSyncValida(v){const t=Date.parse(String(v||""));return Number.isFinite(t)?t:0}
+function isoAhora(){return new Date().toISOString()}
+function tocarRegistro(r){if(r&&typeof r==="object")r.ultimaModificacion=isoAhora();return r}
+function timestampInicialParaRegistro(r){
+  const posibles=[r&&r.ultimaModificacion,r&&r.modificadoEn,r&&r.updatedAt,r&&r.fechaModificacion];
+  for(const v of posibles){if(fechaSyncValida(v))return new Date(fechaSyncValida(v)).toISOString()}
+  return "1970-01-01T00:00:00.000Z";
+}
+function normalizarSubtareas(lista){
+  if(!Array.isArray(lista))return[];
+  return lista.map(s=>{
+    if(typeof s==="string")return{id:generarId(),cod:"",texto:s,inicio:"",vence:"",fin:"",prioridad:"media",ultimaModificacion:isoAhora(),subtareas:[]};
+    return{id:s.id||generarId(),cod:s.cod||"",texto:String(s.texto||""),inicio:s.inicio||"",vence:s.vence||"",fin:s.fin||"",prioridad:["baja","media","alta","critica"].includes(s.prioridad)?s.prioridad:"media",ultimaModificacion:timestampInicialParaRegistro(s),subtareas:normalizarSubtareas(s.subtareas||s.subs)};
+  })
+}
+function normalizarTareasImportadas(lista){
+  if(!Array.isArray(lista))return[];
+  return lista.map((t,i)=>({id:t.id||generarId(),cod:String(t.cod||String(i+1).padStart(4,"0")).slice(-4).padStart(4,"0"),texto:String(t.texto||t.tarea||"Sin texto"),inicio:t.inicio||"",vence:t.vence||"",fin:t.fin||"",prioridad:["baja","media","alta","critica"].includes(t.prioridad)?t.prioridad:"media",ultimaModificacion:timestampInicialParaRegistro(t),subtareas:normalizarSubtareas(t.subtareas||t.subs)}))
+}
+function promoverUltimaTareaEditadaEnMigracion(){
+  try{
+    if(!ultimoCambio||!ultimoCambio.fechaISO||!ultimoCambio.texto)return;
+    const m=String(ultimoCambio.texto).match(/(?:tarea|en)\s+(\d{4})/i);
+    if(!m)return;
+    const cod=m[1];
+    const t=tareas.find(x=>String(x.cod||"")===cod);
+    if(t&&(!fechaSyncValida(t.ultimaModificacion)||t.ultimaModificacion==="1970-01-01T00:00:00.000Z")){
+      t.ultimaModificacion=ultimoCambio.fechaISO;
+      guardarJSONSeguro(STORAGE_TAREAS,tareas);
+    }
+  }catch(e){}
+}
+function nuevaTarea(){const texto=prompt("Texto de la nueva tarea:");if(!texto||!texto.trim())return;const t=tocarRegistro({id:generarId(),cod:siguienteCodigo(),texto:texto.trim(),inicio:"",vence:"",fin:"",prioridad:"media",subtareas:[]});tareas.unshift(t);logAccion("Creada tarea "+t.cod+": "+t.texto);guardarTareasYRender()}
+function editarTarea(id){const t=tareas.find(x=>x.id===id);if(!t)return;const n=prompt("Editar tarea:",t.texto);if(!n||!n.trim())return;const a=t.texto;t.texto=n.trim();tocarRegistro(t);logAccion("Editada tarea "+t.cod+": "+a+" → "+t.texto);guardarTareasYRender()}
+function eliminarTarea(id){const i=tareas.findIndex(x=>x.id===id);if(i<0)return;if(!confirm("¿Eliminar esta tarea y sus subtareas?"))return;const t=tareas[i];tareas.splice(i,1);logAccion("Eliminada tarea "+t.cod+": "+t.texto);guardarTareasYRender()}
+function addSubtarea(id){const t=tareas.find(x=>x.id===id);if(!t)return;const texto=prompt("Nueva subtarea:");if(!texto||!texto.trim())return;if(!Array.isArray(t.subtareas))t.subtareas=[];t.subtareas.push(tocarRegistro({id:generarId(),cod:"",texto:texto.trim(),inicio:"",vence:"",fin:"",prioridad:"media",subtareas:[]}));tocarRegistro(t);logAccion("Añadida subtarea en "+t.cod+": "+texto.trim());guardarTareasYRender()}
+function addSubtareaDentro(tid,sid){const t=tareas.find(x=>x.id===tid);if(!t)return;const padre=buscarSubtarea(t.subtareas,sid);if(!padre)return;const texto=prompt("Nueva subtarea dentro de esta subtarea:");if(!texto||!texto.trim())return;if(!Array.isArray(padre.subtareas))padre.subtareas=[];padre.subtareas.push(tocarRegistro({id:generarId(),cod:"",texto:texto.trim(),inicio:"",vence:"",fin:"",prioridad:"media",subtareas:[]}));tocarRegistro(padre);tocarRegistro(t);logAccion("Añadida subtarea dentro de subtarea en "+t.cod+": "+texto.trim());guardarTareasYRender()}
+function editarSubtarea(tid,sid){const t=tareas.find(x=>x.id===tid);if(!t||!Array.isArray(t.subtareas))return;const s=buscarSubtarea(t.subtareas,sid);if(!s)return;const n=prompt("Editar subtarea:",s.texto);if(!n||!n.trim())return;const a=s.texto;s.texto=n.trim();tocarRegistro(s);tocarRegistro(t);logAccion("Editada subtarea en "+t.cod+": "+a+" → "+s.texto);guardarTareasYRender()}
+function eliminarSubtarea(tid,sid){const t=tareas.find(x=>x.id===tid);if(!t||!Array.isArray(t.subtareas))return;if(!confirm("¿Eliminar esta subtarea y sus subtareas internas?"))return;const s=eliminarSubtareaRec(t.subtareas,sid);if(!s)return;tocarRegistro(t);logAccion("Eliminada subtarea en "+t.cod+": "+s.texto);guardarTareasYRender()}
+function actualizarCampo(id,campo,valor){const t=tareas.find(x=>x.id===id);if(!t)return;const a=t[campo]??"";if(String(a)===String(valor))return;t[campo]=valor;tocarRegistro(t);logAccion("Actualizado "+campo+" en "+t.cod+": "+a+" → "+valor);guardarTareasYRender()}
+function actualizarCampoSubtarea(tid,sid,campo,valor){const t=tareas.find(x=>x.id===tid);if(!t)return;const s=buscarSubtarea(t.subtareas,sid);if(!s)return;const a=s[campo]??"";if(String(a)===String(valor))return;s[campo]=valor;tocarRegistro(s);tocarRegistro(t);logAccion("Actualizado "+campo+" en subtarea de "+t.cod+": "+a+" → "+valor);guardarTareasYRender()}
+function prepararJSON(){asegurarUltimoCambioInicial();tareas=normalizarTareasImportadas(tareas);const data={version:5,app:"Notas de Tareas",fechaExportacion:new Date().toISOString(),ultimoCambio,tareas,historial,filtros,ajustes};document.getElementById("jsonBox").value=JSON.stringify(data,null,2)}
+function copiarCamposRegistro(dest,src){["texto","inicio","vence","fin","prioridad","ultimaModificacion"].forEach(c=>{dest[c]=src[c]!==undefined?src[c]:""})}
+function resolverDiferenciasRegistro(loc,imp,reporte,desc){
+  const campos=["texto","inicio","vence","fin","prioridad"];
+  const difs=campos.filter(c=>campoDiferente(loc,imp,c));
+  if(!difs.length)return "igual";
+  const tl=fechaSyncValida(loc.ultimaModificacion), ti=fechaSyncValida(imp.ultimaModificacion);
+  if(ti>tl){copiarCamposRegistro(loc,imp);reporte.actualizadosPorFecha++;reporte.resueltos.push(desc+" actualizado con versión más reciente recibida ("+imp.ultimaModificacion+")");return "actualizado"}
+  if(tl>ti){reporte.mantenidosPorFecha++;reporte.resueltos.push(desc+" mantiene versión local más reciente ("+loc.ultimaModificacion+")");return "mantenido"}
+  difs.forEach(c=>reporte.conflictos.push(desc+" | campo "+c+" distinto sin fecha más reciente clara. Local: ["+String(loc[c]||"")+"] / Recibido: ["+String(imp[c]||"")+"]."));
+  return "conflicto";
+}
+function fusionarSubtareas(localLista,importLista,reporte,padreCod){
+  if(!Array.isArray(localLista))localLista=[];
+  (importLista||[]).forEach(imp=>{
+    const loc=localLista.find(x=>x.id&&imp.id&&x.id===imp.id);
+    if(!loc){localLista.push(clonarRegistro(imp));reporte.subtareasAnadidas++;return}
+    resolverDiferenciasRegistro(loc,imp,reporte,descripcionRegistro(loc,padreCod));
+    if(!Array.isArray(loc.subtareas))loc.subtareas=[];
+    fusionarSubtareas(loc.subtareas,imp.subtareas||[],reporte,padreCod)
+  })
+}
+function fusionarTareas(locales,importadas){
+  const reporte={tareasAnadidas:0,subtareasAnadidas:0,iguales:0,conflictos:[],codigosRenumerados:[],actualizadosPorFecha:0,mantenidosPorFecha:0,resueltos:[]};
+  const codigosLocales=()=>new Set((locales||[]).map(t=>String(t.cod||"")).filter(Boolean));
+  (importadas||[]).forEach(imp=>{
+    const loc=locales.find(x=>x.id&&imp.id&&x.id===imp.id);
+    if(!loc){
+      const copia=clonarRegistro(imp);const usados=codigosLocales();
+      if(copia.cod&&usados.has(String(copia.cod))){const old=copia.cod;copia.cod=siguienteCodigoDesdeLista(locales);reporte.codigosRenumerados.push(old+" → "+copia.cod+" (registro recibido: "+String(copia.texto||"").slice(0,60)+")")}
+      locales.push(copia);reporte.tareasAnadidas++;return
+    }
+    const r=resolverDiferenciasRegistro(loc,imp,reporte,descripcionRegistro(loc));
+    if(r==="igual")reporte.iguales++;
+    if(!Array.isArray(loc.subtareas))loc.subtareas=[];
+    fusionarSubtareas(loc.subtareas,imp.subtareas||[],reporte,loc.cod||"")
+  });
+  return reporte
+}
+function pintarInformeSync(reporte){const b=document.getElementById("syncReport");if(!b)return;let txt="SINCRONIZACIÓN FINALIZADA\n\n";txt+="Tareas nuevas añadidas: "+reporte.tareasAnadidas+"\n";txt+="Subtareas nuevas añadidas: "+reporte.subtareasAnadidas+"\n";txt+="Registros actualizados por fecha más reciente: "+(reporte.actualizadosPorFecha||0)+"\n";txt+="Registros mantenidos por ser más recientes aquí: "+(reporte.mantenidosPorFecha||0)+"\n";txt+="Registros ya existentes sin cambios: "+reporte.iguales+"\n";if(reporte.codigosRenumerados.length){txt+="\nCÓDIGOS RENUMERADOS PARA EVITAR DUPLICADOS:\n- "+reporte.codigosRenumerados.join("\n- ")+"\n"}if(reporte.resueltos&&reporte.resueltos.length){txt+="\nDIFERENCIAS RESUELTAS AUTOMÁTICAMENTE:\n- "+reporte.resueltos.slice(0,30).join("\n- ")+(reporte.resueltos.length>30?"\n- ...":"")}if(reporte.conflictos.length){txt+="\n\nCONFLICTOS SIN RESOLVER:\n- "+reporte.conflictos.join("\n- ")}else{txt+="\n\nNo quedan conflictos sin resolver."}b.style.display="block";b.className="sync-report "+(reporte.conflictos.length?"sync-warn":"sync-ok");b.textContent=txt}
+function sincronizarJSON(){const raw=document.getElementById("jsonBox").value.trim();if(!raw){alert("Pega primero el JSON del otro dispositivo en la caja.");return}try{const extraido=extraerDatosJSON(raw);if(!confirm("¿Sincronizar los datos pegados con los datos actuales? Si hay diferencias, ganará automáticamente la versión con última modificación más reciente."))return;const importadas=extraido.tareas;const reporte=fusionarTareas(tareas,importadas);if(extraido.data&&Array.isArray(extraido.data.historial)){const vistos=new Set(historial.map(h=>String(h.fechaISO||"")+"|"+String(h.texto||"")));extraido.data.historial.forEach(h=>{const k=String(h.fechaISO||"")+"|"+String(h.texto||"");if(!vistos.has(k)){historial.push(h);vistos.add(k)}});historial.sort((a,b)=>String(b.fechaISO||"").localeCompare(String(a.fechaISO||"")));if(historial.length>500)historial=historial.slice(0,500)}logAccion("Sincronización JSON: "+reporte.tareasAnadidas+" tareas añadidas; "+(reporte.actualizadosPorFecha||0)+" registros actualizados por fecha; "+reporte.conflictos.length+" conflictos sin resolver.");guardarJSONSeguro(STORAGE_TAREAS,tareas);guardarJSONSeguro(STORAGE_HISTORIAL,historial);guardarJSONSeguro(STORAGE_ULTIMO_CAMBIO,ultimoCambio);render();pintarInformeSync(reporte);alert("Sincronización finalizada. Revisa el informe del panel.")}catch(e){const b=document.getElementById("syncReport");if(b){b.style.display="block";b.className="sync-report sync-error";b.textContent="JSON no válido: "+e.message}alert("JSON no válido: "+e.message)}}
+window.addEventListener("load",()=>{setTimeout(()=>{promoverUltimaTareaEditadaEnMigracion();tareas=normalizarTareasImportadas(tareas);guardarJSONSeguro(STORAGE_TAREAS,tareas);render()},0)});
+
+</script>
+</body>
+</html>

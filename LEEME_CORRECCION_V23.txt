@@ -1,0 +1,17 @@
+V23 - SINCRONIZACIÓN POR ÚLTIMA MODIFICACIÓN
+
+Corrección principal:
+- Cuando el mismo registro existe en dos dispositivos con datos diferentes, ya no se queda bloqueado como conflicto normal.
+- Ahora gana automáticamente la versión con el campo ultimaModificacion más reciente.
+
+Importante:
+- Desde esta versión, cada tarea y subtarea guarda ultimaModificacion.
+- Al editar texto, fechas o prioridad se actualiza esa fecha automáticamente.
+- Si una tarea antigua no tenía fecha, queda como antigua salvo que el historial permita asociarla al último cambio.
+
+Uso recomendado:
+1. En el ordenador, ejecutar ARRANCAR_SERVIDOR.bat.
+2. En el móvil, poner http://IP_DEL_ORDENADOR:8787, por ejemplo http://192.168.1.50:8787.
+3. Pulsar Sync automática.
+
+Si una tarea modificada antes de instalar esta versión no se actualizase, edítala una vez más en el dispositivo correcto y vuelve a sincronizar. A partir de esta versión ya quedará fechada correctamente.
